@@ -2,28 +2,25 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
-import 'package:garbage_game/src/components/bullet.dart';
+import 'package:garbage_game/src/components/enemies/ball_enemy.dart';
 import 'package:garbage_game/src/game.dart';
 
-class BallEnemy extends CircleComponent
+class Bullet extends CircleComponent
     with CollisionCallbacks, HasGameReference<Game> {
-  BallEnemy({
+  Bullet({
     required this.velocity,
     required super.position,
-    required double radius,
-    int? lifePoints,
-  })  : lifePoints = lifePoints ?? 3,
-        super(
-          radius: radius,
+  }) : super(
+          radius: 10,
           anchor: Anchor.center,
           paint: Paint()
-            ..color = Colors.red
+            ..color = Colors.orange
             ..style = PaintingStyle.fill,
           children: [CircleHitbox()],
         );
 
   final Vector2 velocity;
-  late int lifePoints;
+  final test = 'as';
 
   @override
   void update(double dt) {
@@ -35,11 +32,8 @@ class BallEnemy extends CircleComponent
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
-    if (other is Bullet) {
-      lifePoints -= 1;
-      if (lifePoints <= 0) {
-        add(RemoveEffect(delay: 0));
-      }
+    if (other is BallEnemy) {
+      add(RemoveEffect(delay: 0));
     }
   }
 }

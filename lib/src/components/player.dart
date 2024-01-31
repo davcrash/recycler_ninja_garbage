@@ -5,9 +5,9 @@ import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
 import 'package:garbage_game/src/game.dart';
 
-class MainCharacter extends PositionComponent
+class Player extends PositionComponent
     with DragCallbacks, HasGameReference<Game> {
-  MainCharacter({
+  Player({
     required super.position,
     required super.size,
   }) : super(
@@ -23,11 +23,12 @@ class MainCharacter extends PositionComponent
   void render(Canvas canvas) {
     super.render(canvas);
     canvas.drawRRect(
-        RRect.fromRectAndRadius(
-          Offset.zero & size.toSize(),
-          const Radius.circular(10 / 2),
-        ),
-        _paint);
+      RRect.fromRectAndRadius(
+        Offset.zero & size.toSize(),
+        const Radius.circular(10 / 2),
+      ),
+      _paint,
+    );
   }
 
   @override
