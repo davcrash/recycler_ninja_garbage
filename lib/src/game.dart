@@ -28,7 +28,7 @@ class Game extends FlameGame
 
   late Player player;
   late final Timer _shootTimer = Timer(
-    0.7,
+    0.5,
     onTick: () => shoot(),
     repeat: true,
   );
