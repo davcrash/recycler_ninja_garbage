@@ -1,7 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
-import 'package:garbage_game/src/components/enemies/ball_enemy.dart';
 import 'package:garbage_game/src/game.dart';
 import 'package:garbage_game/src/interfaces/enemy.dart';
 
@@ -43,14 +42,14 @@ class Bullet extends PositionComponent
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
-    if (other is BallEnemy || other is Enemy) {
+    if (other is Enemy) {
       removeFromParent();
     }
   }
 
   @override
   void onCollisionEnd(PositionComponent other) {
-    if (other is BallEnemy || other is Enemy) {
+    if (other is Enemy) {
       removeFromParent();
     }
     super.onCollisionEnd(other);
