@@ -20,6 +20,7 @@ class BallEnemy extends CircleComponent
             ..color = Colors.red
             ..style = PaintingStyle.fill,
           children: [CircleHitbox()],
+          priority: 1,
         );
 
   final Vector2 velocity;

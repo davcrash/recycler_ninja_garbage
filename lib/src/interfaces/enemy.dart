@@ -16,6 +16,7 @@ class Enemy extends PositionComponent
         super(
           anchor: Anchor.center,
           children: [],
+          priority: 1,
         );
 
   final _paint = Paint()

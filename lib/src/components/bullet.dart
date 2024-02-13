@@ -11,10 +11,7 @@ class Bullet extends PositionComponent
     required super.size,
     required this.velocity,
     required super.position,
-  }) : super(
-          anchor: Anchor.center,
-          children: [RectangleHitbox()],
-        );
+  }) : super(anchor: Anchor.center, children: [RectangleHitbox()], priority: 1);
 
   final Vector2 velocity;
   final _paint = Paint()

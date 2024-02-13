@@ -13,6 +13,7 @@ class Player extends PositionComponent
   }) : super(
           anchor: Anchor.center,
           children: [RectangleHitbox()],
+          priority: 5,
         );
 
   final _paint = Paint()
