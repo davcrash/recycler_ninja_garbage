@@ -2,6 +2,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:garbage_game/src/components/bullet.dart';
+import 'package:garbage_game/src/components/player_move_area.dart';
 import 'package:garbage_game/src/game.dart';
 
 class Enemy extends PositionComponent
@@ -65,6 +66,14 @@ class Enemy extends PositionComponent
       if (lifePoints <= 0) {
         removeFromParent();
       }
+    }
+  }
+
+  @override
+  void onCollisionEnd(PositionComponent other) {
+    super.onCollisionEnd(other);
+    if (other is PlayerMoveArea) {
+      removeFromParent();
     }
   }
 }

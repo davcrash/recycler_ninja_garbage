@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/events.dart';
+import 'package:garbage_game/src/components/player_move_area.dart';
 import 'package:garbage_game/src/interfaces/enemy.dart';
 
 import 'components/bullet.dart';
@@ -44,10 +45,18 @@ class Game extends FlameGame
 
     camera.viewfinder.anchor = Anchor.topLeft;
 
+    final playerHeight = width * 0.1;
+
     world.add(PlayArea());
+    world.add(
+      PlayerMoveArea(
+        size: Vector2(width, playerHeight),
+        position: Vector2(width / 2, height * 0.86),
+      ),
+    );
 
     player = Player(
-      size: Vector2(width * 0.08, width * 0.1),
+      size: Vector2(width * 0.08, playerHeight),
       position: Vector2(width / 2, height * 0.86),
     );
     world.add(player);
