@@ -1,39 +1,61 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
 import 'package:garbage_game/src/components/enemies/ball_enemy.dart';
 import 'package:garbage_game/src/game.dart';
+import 'package:garbage_game/src/interfaces/enemy.dart';
 
-class Bullet extends CircleComponent
+class Bullet extends PositionComponent
     with CollisionCallbacks, HasGameReference<Game> {
   Bullet({
+    required super.size,
     required this.velocity,
     required super.position,
   }) : super(
-          radius: 10,
           anchor: Anchor.center,
-          paint: Paint()
-            ..color = Colors.orange
-            ..style = PaintingStyle.fill,
-          children: [CircleHitbox()],
+          children: [RectangleHitbox()],
         );
 
   final Vector2 velocity;
-  final test = 'as';
+  final _paint = Paint()
+    ..color = Colors.orange
+    ..style = PaintingStyle.fill;
+
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Offset.zero & size.toSize(),
+        const Radius.circular(0),
+      ),
+      _paint,
+    );
+  }
 
   @override
   void update(double dt) {
     super.update(dt);
     position += velocity * dt;
+    if (position.y < 0) {
+      removeFromParent();
+    }
   }
 
   @override
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
-    if (other is BallEnemy) {
-      add(RemoveEffect(delay: 0));
+    if (other is BallEnemy || other is Enemy) {
+      removeFromParent();
     }
+  }
+
+  @override
+  void onCollisionEnd(PositionComponent other) {
+    if (other is BallEnemy || other is Enemy) {
+      removeFromParent();
+    }
+    super.onCollisionEnd(other);
   }
 }

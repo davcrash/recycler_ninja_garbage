@@ -4,12 +4,13 @@ import 'dart:math' as math;
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/events.dart';
-import 'package:garbage_game/src/components/enemies/ball_enemy.dart';
+import 'package:garbage_game/src/interfaces/enemy.dart';
 
 import 'components/bullet.dart';
 import 'components/player.dart';
 import 'components/play_area.dart';
 
+//TODO change name of Game
 class Game extends FlameGame
     with HasCollisionDetection, KeyboardEvents, TapDetector {
   Game()
@@ -67,6 +68,7 @@ class Game extends FlameGame
   void shoot() {
     world.add(
       Bullet(
+        size: Vector2(width * 0.02, width * 0.02),
         position: player.position,
         velocity: Vector2(0, -1).normalized()..scale(height),
       ),
@@ -77,13 +79,17 @@ class Game extends FlameGame
     final min = width / 6;
     final max = width - (width / 6);
     final newRand = min + rand.nextInt(max.toInt() - min.toInt() + 1);
-    world.add(
-      BallEnemy(
+    world.add(Enemy(
+      velocity: Vector2(0, 1).normalized()..scale(height / 6),
+      position: Vector2(newRand, -100),
+      size: Vector2(width * 0.08, width * 0.08),
+    )
+        /* BallEnemy(
         radius: 30,
         position: Vector2(newRand, -100),
         velocity: Vector2(0, 1).normalized()..scale(height / 6),
-      ),
-    );
+      ), */
+        );
 
     /*  world.add(
       BallEnemy(
