@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/events.dart';
+import 'package:flutter/material.dart';
 import 'package:garbage_game/src/components/player_move_area.dart';
 import 'package:garbage_game/src/interfaces/enemy.dart';
 
@@ -28,7 +29,7 @@ class Game extends FlameGame
 
   late Player player;
   late final Timer _shootTimer = Timer(
-    0.5,
+    0.2,
     onTick: () => shoot(),
     repeat: true,
   );
@@ -48,12 +49,12 @@ class Game extends FlameGame
     final playerHeight = width * 0.1;
 
     world.add(PlayArea());
-    world.add(
+    /* world.add(
       PlayerMoveArea(
         size: Vector2(width, playerHeight),
         position: Vector2(width / 2, height * 0.86),
       ),
-    );
+    ); */
 
     player = Player(
       size: Vector2(width * 0.08, playerHeight),
@@ -75,37 +76,44 @@ class Game extends FlameGame
   }
 
   void shoot() {
-    world.add(
+    /* world.add(
       Bullet(
         size: Vector2(width * 0.02, width * 0.02),
         position: player.position,
         velocity: Vector2(0, -1).normalized()..scale(height),
       ),
-    );
+    ); */
   }
 
   addEnemies() async {
     final min = width / 6;
     final max = width - (width / 6);
     final newRand = min + rand.nextInt(max.toInt() - min.toInt() + 1);
-    world.add(Enemy(
-      velocity: Vector2(0, 1).normalized()..scale(height / 6),
-      position: Vector2(newRand, -100),
-      size: Vector2(width * 0.08, width * 0.08),
-    )
-        /* BallEnemy(
-        radius: 30,
+    final newRand2 = min + rand.nextInt(max.toInt() - min.toInt() + 1);
+    world.add(
+      Enemy(
+        speed: 150,
         position: Vector2(newRand, -100),
-        velocity: Vector2(0, 1).normalized()..scale(height / 6),
-      ), */
-        );
-
-    /*  world.add(
-      BallEnemy(
-        radius: 100,
-        position: Vector2(width / 2, -200),
-        velocity: Vector2(0, height * 0.4).normalized()..scale(height / 30),
+        size: Vector2(width * 0.04, width * 0.04),
+        color: Colors.green,
+        isLineal: false,
       ),
-    ); */
+    );
+    world.add(
+      Enemy(
+        speed: 100,
+        position: Vector2(newRand, -100),
+        size: Vector2(width * 0.08, width * 0.08),
+      ),
+    );
+    world.add(
+      Enemy(
+        speed: 50,
+        position: Vector2(newRand2, -100),
+        size: Vector2(width * 0.13, width * 0.13),
+        color: Colors.orange,
+        lifePoints: 5,
+      ),
+    );
   }
 }

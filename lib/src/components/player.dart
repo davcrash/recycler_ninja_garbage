@@ -36,7 +36,8 @@ class Player extends PositionComponent
   void onDragUpdate(DragUpdateEvent event) {
     super.onDragUpdate(event);
     final newPosition = (position.x + event.localDelta.x);
-    if (newPosition < 60 || newPosition > 760) {
+    if (newPosition < game.width / 10 ||
+        newPosition > game.width - game.width / 10) {
       return;
     }
 
