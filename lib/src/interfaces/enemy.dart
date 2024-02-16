@@ -109,7 +109,10 @@ class Enemy extends PositionComponent
     super.onCollision(intersectionPoints, other);
     if (other is Enemy) {
       if (other.position.y < position.y) {
-        position.y = position.y + collisionMove;
+        final positionDiff = other.position.y - position.y;
+        if (positionDiff > 2 && positionDiff < -2) {
+          position.y = position.y + collisionMove;
+        }
       }
       if (other.position.x > position.x &&
           position.x < game.width / 2 &&
