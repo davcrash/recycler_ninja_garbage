@@ -5,7 +5,6 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
-import 'package:garbage_game/src/components/player_move_area.dart';
 import 'package:garbage_game/src/interfaces/enemy.dart';
 
 import 'components/bullet.dart';
@@ -85,35 +84,54 @@ class Game extends FlameGame
     ); */
   }
 
-  addEnemies() async {
-    final min = width / 6;
-    final max = width - (width / 6);
-    final newRand = min + rand.nextInt(max.toInt() - min.toInt() + 1);
-    final newRand2 = min + rand.nextInt(max.toInt() - min.toInt() + 1);
-    world.add(
-      Enemy(
-        speed: 150,
-        position: Vector2(newRand, -100),
-        size: Vector2(width * 0.04, width * 0.04),
-        color: Colors.green,
-        isLineal: false,
-      ),
-    );
-    world.add(
-      Enemy(
-        speed: 100,
-        position: Vector2(newRand, -100),
-        size: Vector2(width * 0.08, width * 0.08),
-      ),
-    );
-    world.add(
-      Enemy(
-        speed: 50,
-        position: Vector2(newRand2, -100),
-        size: Vector2(width * 0.13, width * 0.13),
-        color: Colors.orange,
-        lifePoints: 5,
-      ),
-    );
+  Future<void> addEnemies() async {
+    const int difficulty = 1;
+
+    final minWidth = width / 6;
+    final maxWidth = width - (width / 6);
+
+    final double sizeFactor = width * (0.04 + (0.01 * difficulty));
+    final maxEnemies = maxWidth ~/ sizeFactor;
+    final numEnemies = rand.nextInt(maxEnemies);
+
+    const int speedFactor = 150 - (10 * difficulty);
+
+    final List<Enemy> enemies = [];
+    final newRand =
+        minWidth + rand.nextInt(maxWidth.toInt() - minWidth.toInt() + 1);
+
+    double lastMinorXPosition = newRand;
+    double lastMajorXPosition = newRand;
+
+    for (int i = 0; i < numEnemies; i++) {
+      final newMinorXPosition =
+          lastMinorXPosition - (i > 0 ? sizeFactor * 1.4 : 0);
+      final newMajorXPosition =
+          lastMajorXPosition + (i > 0 ? sizeFactor * 1.4 : 0);
+
+      if (newMinorXPosition > minWidth) {
+        lastMinorXPosition = newMinorXPosition;
+        enemies.add(
+          Enemy(
+            speed: speedFactor.toDouble(),
+            size: Vector2(sizeFactor, sizeFactor),
+            position: Vector2(newMinorXPosition, -100),
+          ),
+        );
+      } else if (newMajorXPosition < maxWidth) {
+        lastMajorXPosition = newMajorXPosition;
+        enemies.add(
+          Enemy(
+            speed: speedFactor.toDouble(),
+            size: Vector2(sizeFactor, sizeFactor),
+            position: Vector2(newMajorXPosition, -100),
+          ),
+        );
+      }
+    }
+
+    for (var enemy in enemies) {
+      world.add(enemy);
+    }
   }
 }
