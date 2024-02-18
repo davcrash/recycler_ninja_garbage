@@ -2,7 +2,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:garbage_game/src/game.dart';
-import 'package:garbage_game/src/interfaces/enemy.dart';
+import 'package:garbage_game/src/components/enemy.dart';
 
 class Bullet extends PositionComponent
     with CollisionCallbacks, HasGameReference<Game> {

@@ -5,7 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
-import 'package:garbage_game/src/interfaces/enemy.dart';
+import 'package:garbage_game/src/components/enemy.dart';
 
 import 'components/bullet.dart';
 import 'components/player.dart';

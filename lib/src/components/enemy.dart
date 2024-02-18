@@ -24,7 +24,7 @@ class Enemy extends PositionComponent
         isLineal = isLineal ?? false,
         super(
           anchor: Anchor.center,
-          children: [],
+          children: [RectangleHitbox()],
           priority: priority ?? 1,
         );
   final double speed;
@@ -48,16 +48,6 @@ class Enemy extends PositionComponent
       ),
       paint,
     );
-  }
-
-  @override
-  void onMount() {
-    super.onMount();
-    hitbox = RectangleHitbox(
-      size: size,
-      isSolid: true,
-    );
-    add(hitbox);
   }
 
   @override
