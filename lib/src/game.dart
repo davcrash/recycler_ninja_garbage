@@ -112,18 +112,16 @@ class Game extends FlameGame
       if (newMinorXPosition > minWidth) {
         lastMinorXPosition = newMinorXPosition;
         enemies.add(
-          Enemy(
-            speed: speedFactor.toDouble(),
-            size: Vector2(sizeFactor, sizeFactor),
-            position: Vector2(newMinorXPosition, -100),
+          Enemy.fast(
+            gameWidth: width,
+            position: Vector2(newMajorXPosition, -100),
           ),
         );
       } else if (newMajorXPosition < maxWidth) {
         lastMajorXPosition = newMajorXPosition;
         enemies.add(
-          Enemy(
-            speed: speedFactor.toDouble(),
-            size: Vector2(sizeFactor, sizeFactor),
+          Enemy.slow(
+            gameWidth: width,
             position: Vector2(newMajorXPosition, -100),
           ),
         );

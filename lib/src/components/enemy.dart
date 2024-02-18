@@ -27,12 +27,49 @@ class Enemy extends PositionComponent
           children: [RectangleHitbox()],
           priority: priority ?? 1,
         );
+
   final double speed;
   late int lifePoints;
-  late final RectangleHitbox hitbox;
   final Color color;
   final bool isLineal;
   final collisionMove = 0.7;
+
+  factory Enemy.fast({
+    required double gameWidth,
+    required Vector2? position,
+  }) {
+    return Enemy(
+      speed: 190,
+      position: position,
+      size: Vector2(gameWidth * 0.05, gameWidth * 0.05),
+      color: Colors.amber,
+      lifePoints: 1,
+    );
+  }
+
+  factory Enemy.slow({
+    required double gameWidth,
+    required Vector2? position,
+  }) {
+    return Enemy(
+      speed: 80,
+      position: position,
+      size: Vector2(gameWidth * 0.12, gameWidth * 0.12),
+      color: Colors.orangeAccent,
+      lifePoints: 4,
+    );
+  }
+
+  factory Enemy.normal({
+    required double gameWidth,
+    required Vector2? position,
+  }) {
+    return Enemy(
+      speed: 150,
+      position: position,
+      size: Vector2(gameWidth * 0.07, gameWidth * 0.07),
+    );
+  }
 
   @override
   void render(Canvas canvas) {
