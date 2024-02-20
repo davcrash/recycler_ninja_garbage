@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:garbage_game/src/game.dart';
 
 class Player extends PositionComponent
-    with DragCallbacks, HasGameReference<Game> {
+    with DragCallbacks, HasGameReference<GarbageGame> {
   Player({
     required super.position,
     required super.size,

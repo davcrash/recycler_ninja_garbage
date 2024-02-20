@@ -5,7 +5,7 @@ import 'package:garbage_game/src/game.dart';
 import 'package:garbage_game/src/components/enemy.dart';
 
 class Bullet extends PositionComponent
-    with CollisionCallbacks, HasGameReference<Game> {
+    with CollisionCallbacks, HasGameReference<GarbageGame> {
   Bullet({
     required super.size,
     required this.velocity,

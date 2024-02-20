@@ -1,8 +1,13 @@
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:garbage_game/src/game.dart' as g_game;
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:garbage_game/src/app.dart';
+import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 
 void main() {
-  final game = g_game.Game();
-  runApp(GameWidget(game: game));
+  runApp(
+    BlocProvider<GameBloc>(
+      create: (context) => GameBloc(),
+      child: const GameApp(),
+    ),
+  );
 }

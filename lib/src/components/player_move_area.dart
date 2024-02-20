@@ -3,7 +3,8 @@ import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:garbage_game/src/game.dart';
 
-class PlayerMoveArea extends PositionComponent with HasGameReference<Game> {
+class PlayerMoveArea extends PositionComponent
+    with HasGameReference<GarbageGame> {
   PlayerMoveArea({
     required super.position,
     required super.size,

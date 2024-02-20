@@ -10,7 +10,7 @@ import 'package:garbage_game/src/components/player_move_area.dart';
 import 'package:garbage_game/src/game.dart';
 
 class Enemy extends PositionComponent
-    with CollisionCallbacks, HasGameReference<Game> {
+    with CollisionCallbacks, HasGameReference<GarbageGame> {
   Enemy({
     required this.speed,
     required super.position,
@@ -127,6 +127,7 @@ class Enemy extends PositionComponent
         removeFromParent();
       }
     } else if (other is PlayerMoveArea || other is Player) {
+      game.gameBloc.increment();
       add(RemoveEffect(delay: 0.2));
     }
   }

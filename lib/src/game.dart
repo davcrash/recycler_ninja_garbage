@@ -5,6 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
+import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/components/enemy.dart';
 
 import 'components/bullet.dart';
@@ -12,10 +13,11 @@ import 'components/player.dart';
 import 'components/play_area.dart';
 
 //TODO change name of Game
-class Game extends FlameGame
+class GarbageGame extends FlameGame
     with HasCollisionDetection, KeyboardEvents, TapDetector {
-  Game()
-      : super(
+  GarbageGame({
+    required this.gameBloc,
+  }) : super(
           camera: CameraComponent.withFixedResolution(
             width: 820.0,
             height: 1600.0,
@@ -25,8 +27,9 @@ class Game extends FlameGame
   double get width => size.x;
   double get height => size.y;
   final rand = math.Random();
-
+  final GameBloc gameBloc;
   late Player player;
+
   late final Timer _shootTimer = Timer(
     0.2,
     onTick: () => shoot(),
@@ -93,8 +96,6 @@ class Game extends FlameGame
     final double sizeFactor = width * (0.04 + (0.01 * difficulty));
     final maxEnemies = maxWidth ~/ sizeFactor;
     final numEnemies = rand.nextInt(maxEnemies);
-
-    const int speedFactor = 150 - (10 * difficulty);
 
     final List<Enemy> enemies = [];
     final newRand =

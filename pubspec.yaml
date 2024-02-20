@@ -32,6 +32,10 @@ dependencies:
     sdk: flutter
   flame: ^1.14.0
   flutter_animate: ^4.2.0
+  bloc: ^8.0.2
+  equatable: ^2.0.3
+  flame_bloc: ^1.4.0
+  flutter_bloc: ^8.1.4
 
 dev_dependencies:
   flutter_test:

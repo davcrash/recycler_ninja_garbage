@@ -5,7 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:garbage_game/src/game.dart';
 
-class PlayArea extends RectangleComponent with HasGameReference<Game> {
+class PlayArea extends RectangleComponent with HasGameReference<GarbageGame> {
   PlayArea()
       : super(
           paint: Paint()..color = Colors.white,
