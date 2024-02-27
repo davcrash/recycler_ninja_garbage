@@ -106,16 +106,6 @@ class GarbageGame extends FlameGame
         .every((entry) =>
             currentLevel.enemies.containsKey(entry.key) &&
             entry.value > currentLevel.enemies[entry.key]!);
-
-    if (isPrintedCompleted) {
-      this.isPrintedCompleted = true;
-      _enemyTimer.pause();
-      return;
-    }
-
-    final minWidth = width / 6;
-    final maxWidth = width - (width / 6);
-
     final enemyKeys = currentLevel.enemies.keys.toList();
     enemyKeys.removeWhere(
       (enemyType) =>
@@ -124,6 +114,16 @@ class GarbageGame extends FlameGame
           currentLevelPrintedEnemies.enemies[enemyType]! >
               currentLevel.enemies[enemyType]!,
     );
+
+    if (isPrintedCompleted || enemyKeys.isEmpty) {
+      this.isPrintedCompleted = true;
+      _enemyTimer.pause();
+      return;
+    }
+
+    final minWidth = width / 6;
+    final maxWidth = width - (width / 6);
+
     final slowEnemy = Enemy.slow(gameWidth: width, position: Vector2(0, 0));
     final normalEnemy = Enemy.normal(gameWidth: width, position: Vector2(0, 0));
     final fastEnemy = Enemy.fast(gameWidth: width, position: Vector2(0, 0));
@@ -134,9 +134,9 @@ class GarbageGame extends FlameGame
       EnemyType.fast: fastEnemy.size.x,
     };
 
-    final randomEnemyPosition = rand.nextInt(enemyKeys.length);
+    final randomEnemy = rand.nextInt(enemyKeys.length);
 
-    final enemyType = enemyKeys[randomEnemyPosition];
+    final enemyType = enemyKeys[randomEnemy];
 
     final double sizeFactor = enemySizes[enemyType] ?? 1;
     final maxEnemies = maxWidth ~/ sizeFactor;
