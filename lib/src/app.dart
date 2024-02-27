@@ -27,33 +27,27 @@ class _GameAppState extends State<GameApp> {
             child: Center(
               child: Column(
                 children: [
-                  BlocBuilder<GameBloc, int>(
+                  BlocBuilder<GameBloc, GameState>(
                     builder: (context, state) {
-                      return Text('$state');
+                      return Text('${state.status}');
                     },
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<GameBloc>().pause();
+                    },
+                    child: const Text('pause'),
                   ),
                   Expanded(
                     child: GameWidget(
                       game: GarbageGame(
                         gameBloc: context.read<GameBloc>(),
                       ),
-                      /* overlayBuilderMap: {
-                            PlayState.welcome.name: (context, game) =>
-                                const OverlayScreen(
-                                  title: 'TAP TO PLAY',
-                                  subtitle: 'Use arrow keys or swipe',
-                                ),
-                            PlayState.gameOver.name: (context, game) =>
-                                const OverlayScreen(
-                                  title: 'G A M E   O V E R',
-                                  subtitle: 'Tap to Play Again',
-                                ),
-                            PlayState.won.name: (context, game) =>
-                                const OverlayScreen(
-                                  title: 'Y O U   W O N ! ! !',
-                                  subtitle: 'Tap to Play Again',
-                                ),
-                          }, */
+                      overlayBuilderMap: {
+                        GameStatus.paused.name: (context, game) => const Center(
+                              child: Text("PAUSED"),
+                            ),
+                      },
                     ),
                   ),
                 ],

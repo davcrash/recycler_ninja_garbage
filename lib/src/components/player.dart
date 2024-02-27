@@ -3,6 +3,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
+import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/game.dart';
 
 class Player extends PositionComponent
@@ -35,6 +36,9 @@ class Player extends PositionComponent
   @override
   void onDragUpdate(DragUpdateEvent event) {
     super.onDragUpdate(event);
+    if (game.gameBloc.state.status == GameStatus.paused) {
+      return;
+    }
     final newPosition = (position.x + event.localDelta.x);
     if (newPosition < game.width / 10 ||
         newPosition > game.width - game.width / 10) {

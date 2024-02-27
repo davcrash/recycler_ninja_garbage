@@ -4,7 +4,7 @@ import 'dart:math' as math;
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/events.dart';
-import 'package:flutter/material.dart';
+import 'package:flame_bloc/flame_bloc.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/components/enemy.dart';
 import 'package:garbage_game/src/const/levels.dart';
@@ -58,6 +58,23 @@ class GarbageGame extends FlameGame
     camera.viewfinder.anchor = Anchor.topLeft;
 
     final playerHeight = width * 0.1;
+
+    await add(
+      FlameBlocListener<GameBloc, GameState>(
+        bloc: gameBloc,
+        onNewState: (state) {
+          if (state.status == GameStatus.paused) {
+            overlays.add(state.status.name);
+            _enemyTimer.pause();
+            _shootTimer.pause();
+          } else if (state.status == GameStatus.playing) {
+            overlays.remove(GameStatus.paused.name);
+            _enemyTimer.resume();
+            _shootTimer.resume();
+          }
+        },
+      ),
+    );
 
     world.add(PlayArea());
     /* world.add(

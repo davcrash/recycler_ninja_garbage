@@ -3,6 +3,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
+import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/components/bullet.dart';
 import 'package:garbage_game/src/components/play_area.dart';
 import 'package:garbage_game/src/components/player.dart';
@@ -96,6 +97,9 @@ class Enemy extends PositionComponent
   @override
   void update(double dt) {
     super.update(dt);
+    if (game.gameBloc.state.status == GameStatus.paused) {
+      return;
+    }
     if (isLineal) {
       final movementY = speed * dt;
       y += movementY;
@@ -133,7 +137,6 @@ class Enemy extends PositionComponent
         removeFromParent();
       }
     } else if (other is PlayerMoveArea || other is Player) {
-      game.gameBloc.increment();
       add(RemoveEffect(delay: 0.2));
     }
   }

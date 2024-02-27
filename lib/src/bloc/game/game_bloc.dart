@@ -4,12 +4,14 @@ import 'package:equatable/equatable.dart';
 part 'game_event.dart';
 part 'game_state.dart';
 
-class GameBloc extends Cubit<int> {
-  GameBloc() : super(0);
+class GameBloc extends Cubit<GameState> {
+  GameBloc() : super(const GameState());
 
-  /// Add 1 to the current state.
-  void increment() => emit(state + 1);
-
-  /// Subtract 1 from the current state.
-  void decrement() => emit(state - 1);
+  void pause() {
+    if (state.status == GameStatus.paused) {
+      emit(state.copyWith(status: GameStatus.playing));
+      return;
+    }
+    emit(state.copyWith(status: GameStatus.paused));
+  }
 }

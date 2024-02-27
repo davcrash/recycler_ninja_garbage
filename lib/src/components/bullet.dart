@@ -1,6 +1,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
+import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/game.dart';
 import 'package:garbage_game/src/components/enemy.dart';
 
@@ -32,6 +33,9 @@ class Bullet extends PositionComponent
   @override
   void update(double dt) {
     super.update(dt);
+    if (game.gameBloc.state.status == GameStatus.paused) {
+      return;
+    }
     position += velocity * dt;
     if (position.y < 0) {
       removeFromParent();

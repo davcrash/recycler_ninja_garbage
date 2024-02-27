@@ -4,9 +4,25 @@ import 'package:garbage_game/src/models/horde.dart';
 final List<Horde> levels = [
   Horde(
     enemies: {
-      EnemyType.slow: 10,
       EnemyType.normal: 10,
-      EnemyType.fast: 10,
+    },
+  ),
+  Horde(
+    enemies: {
+      EnemyType.fast: 30,
+    },
+  ),
+  Horde(
+    enemies: {
+      EnemyType.fast: 30,
+      EnemyType.normal: 20,
+    },
+  ),
+  Horde(
+    enemies: {
+      EnemyType.fast: 30,
+      EnemyType.normal: 20,
+      EnemyType.slow: 3,
     },
   ),
 ];
