@@ -144,6 +144,9 @@ class Enemy extends PositionComponent
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
+    if (game.gameBloc.state.status == GameStatus.paused) {
+      return;
+    }
     if (other is Enemy) {
       if (other.position.y < position.y) {
         final positionDiff = other.position.y - position.y;

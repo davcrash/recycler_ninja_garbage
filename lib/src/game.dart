@@ -43,7 +43,7 @@ class GarbageGame extends FlameGame
     onTick: () => addEnemies(),
     repeat: true,
   );
-  final currentLevel = levels[0];
+  final currentLevel = levels[3];
   final currentLevelPrintedEnemies = Horde(enemies: {
     EnemyType.slow: 0,
     EnemyType.normal: 0,
