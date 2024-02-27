@@ -8,6 +8,7 @@ import 'package:garbage_game/src/components/play_area.dart';
 import 'package:garbage_game/src/components/player.dart';
 import 'package:garbage_game/src/components/player_move_area.dart';
 import 'package:garbage_game/src/game.dart';
+import 'package:garbage_game/src/models/enemy_type.dart';
 
 class Enemy extends PositionComponent
     with CollisionCallbacks, HasGameReference<GarbageGame> {
@@ -15,11 +16,13 @@ class Enemy extends PositionComponent
     required this.speed,
     required super.position,
     required super.size,
+    EnemyType? type,
     Color? color,
     int? lifePoints,
     int? priority,
     bool? isLineal,
-  })  : lifePoints = lifePoints ?? 2,
+  })  : type = type ?? EnemyType.normal,
+        lifePoints = lifePoints ?? 2,
         color = color ?? Colors.red,
         isLineal = isLineal ?? false,
         super(
@@ -28,6 +31,7 @@ class Enemy extends PositionComponent
           priority: priority ?? 1,
         );
 
+  final EnemyType type;
   final double speed;
   late int lifePoints;
   final Color color;
@@ -39,6 +43,7 @@ class Enemy extends PositionComponent
     required Vector2? position,
   }) {
     return Enemy(
+      type: EnemyType.fast,
       speed: 190,
       position: position,
       size: Vector2(gameWidth * 0.05, gameWidth * 0.05),
@@ -52,6 +57,7 @@ class Enemy extends PositionComponent
     required Vector2? position,
   }) {
     return Enemy(
+      type: EnemyType.slow,
       speed: 80,
       position: position,
       size: Vector2(gameWidth * 0.12, gameWidth * 0.12),
