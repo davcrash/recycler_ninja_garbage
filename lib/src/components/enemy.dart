@@ -134,9 +134,11 @@ class Enemy extends PositionComponent
     if (other is Bullet) {
       lifePoints -= 1;
       if (lifePoints <= 0) {
+        game.gameBloc.killEnemy();
         removeFromParent();
       }
     } else if (other is PlayerMoveArea || other is Player) {
+      game.gameBloc.killEnemy();
       add(RemoveEffect(delay: 0.2));
     }
   }

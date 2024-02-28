@@ -29,7 +29,9 @@ class _GameAppState extends State<GameApp> {
                 children: [
                   BlocBuilder<GameBloc, GameState>(
                     builder: (context, state) {
-                      return Text('${state.status}');
+                      return Text(
+                        '${state.status} LEVEL:${state.currentLevelNumber} KILL:${state.killedEnemies}',
+                      );
                     },
                   ),
                   ElevatedButton(
@@ -46,6 +48,10 @@ class _GameAppState extends State<GameApp> {
                       overlayBuilderMap: {
                         GameStatus.paused.name: (context, game) => const Center(
                               child: Text("PAUSED"),
+                            ),
+                        GameStatus.wonLevel.name: (context, game) =>
+                            const Center(
+                              child: Text("WON LEVEL"),
                             ),
                       },
                     ),

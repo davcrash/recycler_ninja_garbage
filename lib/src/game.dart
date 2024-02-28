@@ -43,12 +43,13 @@ class GarbageGame extends FlameGame
     onTick: () => addEnemies(),
     repeat: true,
   );
-  final currentLevel = levels[3];
-  final currentLevelPrintedEnemies = Horde(enemies: {
+  final currentLevelPrintedEnemies = {
     EnemyType.slow: 0,
     EnemyType.normal: 0,
     EnemyType.fast: 0,
-  });
+  };
+  Horde currentLevel = levels[0];
+
   bool isPrintedCompleted = false;
 
   @override
@@ -58,19 +59,41 @@ class GarbageGame extends FlameGame
     camera.viewfinder.anchor = Anchor.topLeft;
 
     final playerHeight = width * 0.1;
-
+    //status listener
     await add(
       FlameBlocListener<GameBloc, GameState>(
+        listenWhen: (prevS, newS) => prevS.status != newS.status,
         bloc: gameBloc,
         onNewState: (state) {
-          if (state.status == GameStatus.paused) {
-            overlays.add(state.status.name);
-            _enemyTimer.pause();
+          switch (state.status) {
+            case GameStatus.paused:
+            case GameStatus.wonLevel:
+              overlays.add(state.status.name);
+              _enemyTimer.pause();
+              _shootTimer.pause();
+              break;
+
+            case GameStatus.playing:
+            default:
+              overlays.remove(GameStatus.paused.name);
+              overlays.remove(GameStatus.wonLevel.name);
+              _enemyTimer.resume();
+              _shootTimer.resume();
+              break;
+          }
+        },
+      ),
+    );
+    //killed listener
+    await add(
+      FlameBlocListener<GameBloc, GameState>(
+        listenWhen: (prevS, newS) => prevS.killedEnemies != newS.killedEnemies,
+        bloc: gameBloc,
+        onNewState: (state) {
+          final enemiesInScreen = world.children.query<Enemy>().length;
+          if (isPrintedCompleted && enemiesInScreen == 1) {
+            gameBloc.wonLevel();
             _shootTimer.pause();
-          } else if (state.status == GameStatus.playing) {
-            overlays.remove(GameStatus.paused.name);
-            _enemyTimer.resume();
-            _shootTimer.resume();
           }
         },
       ),
@@ -104,11 +127,6 @@ class GarbageGame extends FlameGame
   }
 
   void shoot() {
-    final enemiesInScreen = world.children.query<Enemy>().length;
-    if (isPrintedCompleted && enemiesInScreen == 0) {
-      _shootTimer.pause();
-    }
-
     world.add(
       Bullet(
         size: Vector2(width * 0.02, width * 0.02),
@@ -119,16 +137,17 @@ class GarbageGame extends FlameGame
   }
 
   Future<void> addEnemies() async {
-    final bool isPrintedCompleted = currentLevelPrintedEnemies.enemies.entries
-        .every((entry) =>
+    final currentLevel = gameBloc.state.currentLevel;
+    final bool isPrintedCompleted = currentLevelPrintedEnemies.entries.every(
+        (entry) =>
             currentLevel.enemies.containsKey(entry.key) &&
             entry.value > currentLevel.enemies[entry.key]!);
     final enemyKeys = currentLevel.enemies.keys.toList();
     enemyKeys.removeWhere(
       (enemyType) =>
-          currentLevelPrintedEnemies.enemies.containsKey(enemyType) &&
+          currentLevelPrintedEnemies.containsKey(enemyType) &&
           currentLevel.enemies.containsKey(enemyType) &&
-          currentLevelPrintedEnemies.enemies[enemyType]! >
+          currentLevelPrintedEnemies[enemyType]! >
               currentLevel.enemies[enemyType]!,
     );
 
@@ -188,8 +207,8 @@ class GarbageGame extends FlameGame
     for (var enemy in enemies) {
       world.add(enemy);
     }
-    currentLevelPrintedEnemies.enemies[enemyType] =
-        (currentLevelPrintedEnemies.enemies[enemyType] ?? 0) + enemies.length;
+    currentLevelPrintedEnemies[enemyType] =
+        (currentLevelPrintedEnemies[enemyType] ?? 0) + enemies.length;
   }
 
   Enemy getEnemyByEnemyType(EnemyType type, double xPosition) {
