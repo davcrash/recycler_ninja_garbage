@@ -49,9 +49,19 @@ class _GameAppState extends State<GameApp> {
                         GameStatus.paused.name: (context, game) => const Center(
                               child: Text("PAUSED"),
                             ),
-                        GameStatus.wonLevel.name: (context, game) =>
-                            const Center(
-                              child: Text("WON LEVEL"),
+                        GameStatus.wonLevel.name: (context, game) => Center(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Text("WON LEVEL"),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      context.read<GameBloc>().pause();
+                                    },
+                                    child: const Text('continue'),
+                                  ),
+                                ],
+                              ),
                             ),
                       },
                     ),

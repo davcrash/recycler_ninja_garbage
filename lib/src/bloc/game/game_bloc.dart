@@ -10,11 +10,11 @@ class GameBloc extends Cubit<GameState> {
   GameBloc() : super(GameState(currentLevel: levels[0]));
 
   void pause() {
-    if (state.status == GameStatus.paused) {
-      emit(state.copyWith(status: GameStatus.playing));
+    if (state.status == GameStatus.playing) {
+      emit(state.copyWith(status: GameStatus.paused));
       return;
     }
-    emit(state.copyWith(status: GameStatus.paused));
+    emit(state.copyWith(status: GameStatus.playing));
   }
 
   void wonLevel() {
