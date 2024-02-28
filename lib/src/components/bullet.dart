@@ -32,10 +32,10 @@ class Bullet extends PositionComponent
 
   @override
   void update(double dt) {
-    super.update(dt);
     if (game.gameBloc.state.status == GameStatus.paused) {
       return;
     }
+    super.update(dt);
     position += velocity * dt;
     if (position.y < 0) {
       removeFromParent();

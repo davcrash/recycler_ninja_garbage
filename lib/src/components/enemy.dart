@@ -96,10 +96,10 @@ class Enemy extends PositionComponent
 
   @override
   void update(double dt) {
-    super.update(dt);
     if (game.gameBloc.state.status == GameStatus.paused) {
       return;
     }
+    super.update(dt);
     if (isLineal) {
       final movementY = speed * dt;
       y += movementY;
@@ -134,11 +134,11 @@ class Enemy extends PositionComponent
     if (other is Bullet) {
       lifePoints -= 1;
       if (lifePoints <= 0) {
-        game.gameBloc.killEnemy();
+        game.gameBloc.killEnemy(byBullet: true, type: type);
         removeFromParent();
       }
     } else if (other is PlayerMoveArea || other is Player) {
-      game.gameBloc.killEnemy();
+      game.gameBloc.killEnemy(type: type);
       add(RemoveEffect(delay: 0.2));
     }
   }

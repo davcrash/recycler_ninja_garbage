@@ -30,7 +30,7 @@ class _GameAppState extends State<GameApp> {
                   BlocBuilder<GameBloc, GameState>(
                     builder: (context, state) {
                       return Text(
-                        '${state.status} LEVEL:${state.currentLevelNumber} KILL:${state.killedEnemies}',
+                        '${state.status} LEVEL:${state.currentLevelNumber} KILL:${state.killedEnemies} Score: ${state.score}',
                       );
                     },
                   ),

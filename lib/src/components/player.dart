@@ -35,10 +35,10 @@ class Player extends PositionComponent
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    super.onDragUpdate(event);
     if (game.gameBloc.state.status == GameStatus.paused) {
       return;
     }
+    super.onDragUpdate(event);
     final newPosition = (position.x + event.localDelta.x);
     if (newPosition < game.width / 10 ||
         newPosition > game.width - game.width / 10) {
