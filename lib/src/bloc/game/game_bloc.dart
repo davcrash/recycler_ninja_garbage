@@ -45,6 +45,26 @@ class GameBloc extends Cubit<GameState> {
     );
   }
 
+  void playerCollision({
+    required EnemyType type,
+  }) {
+    final newLifePoints = state.playerLifePoints - _getDamageByType(type);
+    if (newLifePoints <= 0) {
+      emit(
+        state.copyWith(
+          playerLifePoints: state.playerLifePoints - _getDamageByType(type),
+          status: GameStatus.gameOver,
+        ),
+      );
+      return;
+    }
+    emit(
+      state.copyWith(
+        playerLifePoints: state.playerLifePoints - _getDamageByType(type),
+      ),
+    );
+  }
+
   int _getScoreByType(bool byBullet, EnemyType type) {
     if (!byBullet) return 0;
     switch (type) {
@@ -55,6 +75,18 @@ class GameBloc extends Cubit<GameState> {
       case EnemyType.normal:
       default:
         return 100;
+    }
+  }
+
+  int _getDamageByType(EnemyType type) {
+    switch (type) {
+      case EnemyType.fast:
+        return 1;
+      case EnemyType.slow:
+        return 3;
+      case EnemyType.normal:
+      default:
+        return 2;
     }
   }
 }

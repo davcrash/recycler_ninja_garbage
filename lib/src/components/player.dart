@@ -4,10 +4,11 @@ import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
+import 'package:garbage_game/src/components/enemy.dart';
 import 'package:garbage_game/src/game.dart';
 
 class Player extends PositionComponent
-    with DragCallbacks, HasGameReference<GarbageGame> {
+    with DragCallbacks, CollisionCallbacks, HasGameReference<GarbageGame> {
   Player({
     required super.position,
     required super.size,
@@ -56,5 +57,16 @@ class Player extends PositionComponent
       ),
       EffectController(duration: 0.1),
     ));
+  }
+
+  @override
+  void onCollisionStart(
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
+    super.onCollisionStart(intersectionPoints, other);
+    if (other is Enemy) {
+      game.gameBloc.playerCollision(type: other.type);
+    }
   }
 }

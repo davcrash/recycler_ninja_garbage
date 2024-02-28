@@ -9,6 +9,7 @@ class GameState extends Equatable {
     this.currentLevelNumber = 0,
     this.killedEnemies = 0,
     this.score = 0,
+    this.playerLifePoints = 30,
   });
 
   final GameStatus status;
@@ -16,6 +17,7 @@ class GameState extends Equatable {
   final int currentLevelNumber;
   final int killedEnemies;
   final int score;
+  final int playerLifePoints;
 
   GameState copyWith({
     GameStatus? status,
@@ -23,6 +25,7 @@ class GameState extends Equatable {
     int? currentLevelNumber,
     int? killedEnemies,
     int? score,
+    int? playerLifePoints,
   }) {
     return GameState(
       status: status ?? this.status,
@@ -30,6 +33,7 @@ class GameState extends Equatable {
       currentLevelNumber: currentLevelNumber ?? this.currentLevelNumber,
       killedEnemies: killedEnemies ?? this.killedEnemies,
       score: score ?? this.score,
+      playerLifePoints: playerLifePoints ?? this.playerLifePoints,
     );
   }
 
@@ -38,6 +42,8 @@ class GameState extends Equatable {
         status,
         currentLevel,
         currentLevelNumber,
+        killedEnemies,
         score,
+        playerLifePoints,
       ];
 }
