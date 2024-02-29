@@ -78,6 +78,7 @@ class GarbageGame extends FlameGame
             case GameStatus.paused:
             case GameStatus.wonLevel:
             case GameStatus.gameOver:
+              _restartEnemiesPrintedCounter();
               currentEnemies = state.currentLevel.enemies;
               overlays.add(state.status.name);
               _shootTimer.pause();
@@ -86,8 +87,8 @@ class GarbageGame extends FlameGame
               break;
 
             case GameStatus.restarting:
-              _removeEnemiesFromScreen();
               _restartEnemiesPrintedCounter();
+              _removeEnemiesFromScreen();
               isPrintedCompleted = false;
               currentEnemies = state.currentLevel.enemies;
               break;
@@ -111,7 +112,7 @@ class GarbageGame extends FlameGame
         bloc: gameBloc,
         onNewState: (state) {
           final enemiesInScreen = world.children.query<Enemy>().length;
-          if (isPrintedCompleted && enemiesInScreen == 1) {
+          if (isPrintedCompleted && enemiesInScreen <= 1) {
             gameBloc.wonLevel();
             _shootTimer.pause();
           }
@@ -179,6 +180,7 @@ class GarbageGame extends FlameGame
             currentEnemies.containsKey(entry.key) &&
             entry.value > currentEnemies[entry.key]!);
     final enemyKeys = [...currentEnemies.keys.toList()];
+
     enemyKeys.removeWhere(
       (enemyType) =>
           currentLevelPrintedEnemies.containsKey(enemyType) &&

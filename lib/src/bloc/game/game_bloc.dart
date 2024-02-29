@@ -4,7 +4,6 @@ import 'package:garbage_game/src/const/levels.dart';
 import 'package:garbage_game/src/models/enemy_type.dart';
 import 'package:garbage_game/src/models/horde.dart';
 
-part 'game_event.dart';
 part 'game_state.dart';
 
 class GameBloc extends Cubit<GameState> {

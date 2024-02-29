@@ -36,7 +36,7 @@ class Enemy extends PositionComponent
   late int lifePoints;
   final Color color;
   final bool isLineal;
-  final collisionMove = 0.7;
+  final collisionMove = 0.9;
 
   factory Enemy.fast({
     required double gameWidth,
