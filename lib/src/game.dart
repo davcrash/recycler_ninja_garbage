@@ -9,7 +9,6 @@ import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/components/enemy.dart';
 import 'package:garbage_game/src/const/levels.dart';
 import 'package:garbage_game/src/models/enemy_type.dart';
-import 'package:garbage_game/src/models/horde.dart';
 
 import 'components/bullet.dart';
 import 'components/player.dart';
