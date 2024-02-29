@@ -71,7 +71,7 @@ class Enemy extends PositionComponent
     required Vector2? position,
   }) {
     return Enemy(
-      speed: 150,
+      speed: 155,
       position: position,
       size: Vector2(gameWidth * 0.07, gameWidth * 0.07),
     );
