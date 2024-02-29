@@ -14,12 +14,12 @@ class PowerUp extends PositionComponent
     PowerUpType? type,
     Color? color,
     int? priority,
-  })  : type = type ?? PowerUpType.gun,
+  })  : type = type ?? PowerUpType.heal,
         color = color ?? Colors.blue,
         super(
           anchor: Anchor.center,
           children: [RectangleHitbox()],
-          priority: priority ?? 2,
+          priority: priority ?? 6,
         );
 
   final PowerUpType type;

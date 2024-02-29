@@ -10,6 +10,7 @@ import 'package:garbage_game/src/components/enemy.dart';
 import 'package:garbage_game/src/components/power_up.dart';
 import 'package:garbage_game/src/const/levels.dart';
 import 'package:garbage_game/src/models/enemy_type.dart';
+import 'package:garbage_game/src/models/power_up_type.dart';
 
 import 'components/bullet.dart';
 import 'components/player.dart';
@@ -46,7 +47,7 @@ class GarbageGame extends FlameGame
   );
 
   late final Timer _powerUpTimer = Timer(
-    4,
+    .1,
     onTick: () => _addPowerUp(),
     repeat: true,
   );
@@ -149,12 +150,15 @@ class GarbageGame extends FlameGame
     final maxWidth = width - (width / 6);
     final newRand =
         minWidth + rand.nextInt(maxWidth.toInt() - minWidth.toInt() + 1);
+    const typeValues = PowerUpType.values;
+    final powerType = typeValues[rand.nextInt(typeValues.length)];
 
     world.add(
       PowerUp(
         size: Vector2(width * 0.06, width * 0.06),
         position: Vector2(newRand, -100),
-        speed: 100,
+        speed: 300,
+        type: powerType,
       ),
     );
   }

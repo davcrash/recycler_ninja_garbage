@@ -1,1 +1,7 @@
-enum PowerUpType { gun }
+enum PowerUpType {
+  heal,
+  machineGun,
+  bigGun,
+  bounceBullet,
+  nuclearBomb,
+}
