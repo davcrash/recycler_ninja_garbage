@@ -34,11 +34,12 @@ class GameBloc extends Cubit<GameState> {
 
   void killEnemy({
     bool byBullet = false,
+    int enemiesCount = 1,
     required EnemyType type,
   }) {
     emit(
       state.copyWith(
-        killedEnemies: state.killedEnemies + 1,
+        killedEnemies: state.killedEnemies + enemiesCount,
         score: state.score + _getScoreByType(byBullet, type),
       ),
     );
@@ -97,5 +98,24 @@ class GameBloc extends Cubit<GameState> {
       default:
         return 2;
     }
+  }
+
+  heal() {
+    if (state.playerLifePoints >= 30) return;
+    final sumFiveToLife = state.playerLifePoints + 5;
+    emit(
+      state.copyWith(
+        playerLifePoints: sumFiveToLife >= 30 ? 30 : sumFiveToLife,
+      ),
+    );
+  }
+
+  nuclearBomb({required int count}) {
+    emit(
+      state.copyWith(
+        killedEnemies: state.killedEnemies + count,
+        score: state.score + (10 * count),
+      ),
+    );
   }
 }

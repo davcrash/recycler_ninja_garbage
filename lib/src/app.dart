@@ -2,6 +2,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
+import 'package:garbage_game/src/bloc/power_up/power_up_bloc.dart';
 import 'package:garbage_game/src/game.dart';
 
 class GameApp extends StatefulWidget {
@@ -44,6 +45,7 @@ class _GameAppState extends State<GameApp> {
                     child: GameWidget(
                       game: GarbageGame(
                         gameBloc: context.read<GameBloc>(),
+                        powerUpBloc: context.read<PowerUpBloc>(),
                       ),
                       overlayBuilderMap: {
                         GameStatus.paused.name: (context, game) => const Center(

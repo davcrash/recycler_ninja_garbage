@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/components/bullet.dart';
@@ -96,7 +95,9 @@ class Enemy extends PositionComponent
   @override
   void update(double dt) {
     final status = game.gameBloc.state.status;
-    if (status == GameStatus.paused || status == GameStatus.gameOver) {
+    if (status == GameStatus.paused ||
+        status == GameStatus.gameOver ||
+        status == GameStatus.wonLevel) {
       return;
     }
     super.update(dt);
@@ -134,12 +135,12 @@ class Enemy extends PositionComponent
     if (other is Bullet) {
       lifePoints -= 1;
       if (lifePoints <= 0) {
-        game.gameBloc.killEnemy(byBullet: true, type: type);
         removeFromParent();
+        game.gameBloc.killEnemy(byBullet: true, type: type);
       }
     } else if (other is Player) {
+      removeFromParent();
       game.gameBloc.killEnemy(type: type);
-      add(RemoveEffect(delay: 0.2));
     }
   }
 

@@ -1,7 +1,9 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
+import 'package:garbage_game/src/components/player.dart';
 import 'package:garbage_game/src/game.dart';
 import 'package:garbage_game/src/models/power_up_type.dart';
 
@@ -56,6 +58,24 @@ class PowerUp extends PositionComponent
 
     if (position.y > game.height) {
       removeFromParent();
+    }
+  }
+
+  @override
+  void onCollisionStart(
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
+    super.onCollisionStart(intersectionPoints, other);
+    if (other is Player) {
+      add(
+        ScaleEffect.to(
+          Vector2.all(0.6),
+          EffectController(duration: 0.2),
+        ),
+      );
+      add(RemoveEffect(delay: 0.2));
+      game.powerUpBloc.catchAPower(type: type);
     }
   }
 }

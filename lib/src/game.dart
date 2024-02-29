@@ -6,6 +6,7 @@ import 'package:flame/game.dart';
 import 'package:flame/events.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
+import 'package:garbage_game/src/bloc/power_up/power_up_bloc.dart';
 import 'package:garbage_game/src/components/enemy.dart';
 import 'package:garbage_game/src/components/power_up.dart';
 import 'package:garbage_game/src/const/levels.dart';
@@ -20,6 +21,7 @@ class GarbageGame extends FlameGame
     with HasCollisionDetection, KeyboardEvents, TapDetector {
   GarbageGame({
     required this.gameBloc,
+    required this.powerUpBloc,
   }) : super(
           camera: CameraComponent.withFixedResolution(
             width: 820.0,
@@ -32,6 +34,7 @@ class GarbageGame extends FlameGame
 
   final rand = math.Random();
   final GameBloc gameBloc;
+  final PowerUpBloc powerUpBloc;
   late Player player;
 
   late final Timer _shootTimer = Timer(
@@ -47,7 +50,7 @@ class GarbageGame extends FlameGame
   );
 
   late final Timer _powerUpTimer = Timer(
-    .1,
+    4,
     onTick: () => _addPowerUp(),
     repeat: true,
   );
@@ -78,6 +81,7 @@ class GarbageGame extends FlameGame
             case GameStatus.paused:
             case GameStatus.wonLevel:
             case GameStatus.gameOver:
+              _removePowerUpsFromScreen();
               _restartEnemiesPrintedCounter();
               currentEnemies = state.currentLevel.enemies;
               overlays.add(state.status.name);
@@ -89,6 +93,7 @@ class GarbageGame extends FlameGame
             case GameStatus.restarting:
               _restartEnemiesPrintedCounter();
               _removeEnemiesFromScreen();
+              _removePowerUpsFromScreen();
               isPrintedCompleted = false;
               currentEnemies = state.currentLevel.enemies;
               break;
@@ -105,6 +110,7 @@ class GarbageGame extends FlameGame
         },
       ),
     );
+
     //killed listener
     await add(
       FlameBlocListener<GameBloc, GameState>(
@@ -114,7 +120,24 @@ class GarbageGame extends FlameGame
           final enemiesInScreen = world.children.query<Enemy>().length;
           if (isPrintedCompleted && enemiesInScreen <= 1) {
             gameBloc.wonLevel();
-            _shootTimer.pause();
+          }
+        },
+      ),
+    );
+
+    //power up listener
+    await add(
+      FlameBlocListener<PowerUpBloc, PowerUpState>(
+        bloc: powerUpBloc,
+        onNewState: (state) {
+          switch (state.latestCaughtPower) {
+            case PowerUpType.heal:
+              gameBloc.heal();
+              break;
+            case PowerUpType.nuclearBomb:
+              _removeEnemiesFromScreen(sumInScore: true);
+              break;
+            default:
           }
         },
       ),
@@ -270,9 +293,26 @@ class GarbageGame extends FlameGame
     }
   }
 
-  void _removeEnemiesFromScreen() {
-    final enemiesInScreen = world.children.query<Enemy>();
+  void _removeEnemiesFromScreen({bool sumInScore = false}) async {
+    final enemiesInScreen = [...world.children.query<Enemy>()];
     for (var enemy in enemiesInScreen) {
+      enemy.removeFromParent();
+      while (!enemy.isRemoved) {
+        await Future.delayed(const Duration(milliseconds: 15));
+      }
+    }
+    if (sumInScore) {
+      gameBloc.killEnemy(
+        byBullet: true,
+        enemiesCount: enemiesInScreen.length,
+        type: EnemyType.fast,
+      );
+    }
+  }
+
+  void _removePowerUpsFromScreen() async {
+    final powersInScreen = [...world.children.query<PowerUp>()];
+    for (var enemy in powersInScreen) {
       enemy.removeFromParent();
     }
   }
