@@ -43,14 +43,15 @@ class GarbageGame extends FlameGame
     onTick: () => addEnemies(),
     repeat: true,
   );
-  final currentLevelPrintedEnemies = {
+
+  Map<EnemyType, int> currentLevelPrintedEnemies = {
     EnemyType.slow: 0,
     EnemyType.normal: 0,
     EnemyType.fast: 0,
   };
-  Horde currentLevel = levels[0];
 
   bool isPrintedCompleted = false;
+  Map<EnemyType, int> currentEnemies = levels[0].enemies;
 
   @override
   FutureOr<void> onLoad() async {
@@ -68,15 +69,24 @@ class GarbageGame extends FlameGame
           switch (state.status) {
             case GameStatus.paused:
             case GameStatus.wonLevel:
+            case GameStatus.gameOver:
+              currentEnemies = state.currentLevel.enemies;
               overlays.add(state.status.name);
               _enemyTimer.pause();
               _shootTimer.pause();
               break;
 
+            case GameStatus.restarting:
+              removeEnemiesFromScreen();
+              restartEnemiesPrintedCounter();
+              isPrintedCompleted = false;
+              currentEnemies = state.currentLevel.enemies;
+              break;
             case GameStatus.playing:
             default:
               overlays.remove(GameStatus.paused.name);
               overlays.remove(GameStatus.wonLevel.name);
+              overlays.remove(GameStatus.gameOver.name);
               _enemyTimer.resume();
               _shootTimer.resume();
               break;
@@ -100,12 +110,6 @@ class GarbageGame extends FlameGame
     );
 
     world.add(PlayArea());
-    /* world.add(
-      PlayerMoveArea(
-        size: Vector2(width, playerHeight),
-        position: Vector2(width / 2, height * 0.86),
-      ),
-    ); */
 
     player = Player(
       size: Vector2(width * 0.08, playerHeight),
@@ -137,18 +141,16 @@ class GarbageGame extends FlameGame
   }
 
   Future<void> addEnemies() async {
-    final currentLevel = gameBloc.state.currentLevel;
     final bool isPrintedCompleted = currentLevelPrintedEnemies.entries.every(
         (entry) =>
-            currentLevel.enemies.containsKey(entry.key) &&
-            entry.value > currentLevel.enemies[entry.key]!);
-    final enemyKeys = currentLevel.enemies.keys.toList();
+            currentEnemies.containsKey(entry.key) &&
+            entry.value > currentEnemies[entry.key]!);
+    final enemyKeys = [...currentEnemies.keys.toList()];
     enemyKeys.removeWhere(
       (enemyType) =>
           currentLevelPrintedEnemies.containsKey(enemyType) &&
-          currentLevel.enemies.containsKey(enemyType) &&
-          currentLevelPrintedEnemies[enemyType]! >
-              currentLevel.enemies[enemyType]!,
+          currentEnemies.containsKey(enemyType) &&
+          currentLevelPrintedEnemies[enemyType]! > currentEnemies[enemyType]!,
     );
 
     if (isPrintedCompleted || enemyKeys.isEmpty) {
@@ -230,5 +232,20 @@ class GarbageGame extends FlameGame
           position: Vector2(xPosition, -100),
         );
     }
+  }
+
+  void removeEnemiesFromScreen() {
+    final enemiesInScreen = world.children.query<Enemy>();
+    for (var enemy in enemiesInScreen) {
+      enemy.removeFromParent();
+    }
+  }
+
+  void restartEnemiesPrintedCounter() {
+    currentLevelPrintedEnemies = {
+      EnemyType.slow: 0,
+      EnemyType.normal: 0,
+      EnemyType.fast: 0,
+    };
   }
 }

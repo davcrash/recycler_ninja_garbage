@@ -65,6 +65,16 @@ class GameBloc extends Cubit<GameState> {
     );
   }
 
+  void restart() {
+    emit(
+      GameState(
+        status: GameStatus.restarting,
+        currentLevel: levels[0],
+      ),
+    );
+    emit(const GameState(status: GameStatus.playing));
+  }
+
   int _getScoreByType(bool byBullet, EnemyType type) {
     if (!byBullet) return 0;
     switch (type) {

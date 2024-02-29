@@ -63,6 +63,20 @@ class _GameAppState extends State<GameApp> {
                                 ],
                               ),
                             ),
+                        GameStatus.gameOver.name: (context, game) => Center(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Text("Game over"),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      context.read<GameBloc>().restart();
+                                    },
+                                    child: const Text('restart'),
+                                  ),
+                                ],
+                              ),
+                            ),
                       },
                     ),
                   ),

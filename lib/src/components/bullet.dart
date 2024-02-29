@@ -32,7 +32,8 @@ class Bullet extends PositionComponent
 
   @override
   void update(double dt) {
-    if (game.gameBloc.state.status == GameStatus.paused) {
+    final status = game.gameBloc.state.status;
+    if (status == GameStatus.paused || status == GameStatus.gameOver) {
       return;
     }
     super.update(dt);

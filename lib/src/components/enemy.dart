@@ -96,7 +96,8 @@ class Enemy extends PositionComponent
 
   @override
   void update(double dt) {
-    if (game.gameBloc.state.status == GameStatus.paused) {
+    final status = game.gameBloc.state.status;
+    if (status == GameStatus.paused || status == GameStatus.gameOver) {
       return;
     }
     super.update(dt);
@@ -145,10 +146,11 @@ class Enemy extends PositionComponent
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    super.onCollision(intersectionPoints, other);
-    if (game.gameBloc.state.status == GameStatus.paused) {
+    final status = game.gameBloc.state.status;
+    if (status == GameStatus.paused || status == GameStatus.gameOver) {
       return;
     }
+    super.onCollision(intersectionPoints, other);
     if (other is Enemy) {
       if (other.position.y < position.y) {
         final positionDiff = other.position.y - position.y;

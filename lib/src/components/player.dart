@@ -36,7 +36,8 @@ class Player extends PositionComponent
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    if (game.gameBloc.state.status == GameStatus.paused) {
+    final status = game.gameBloc.state.status;
+    if (status == GameStatus.paused || status == GameStatus.gameOver) {
       return;
     }
     super.onDragUpdate(event);
