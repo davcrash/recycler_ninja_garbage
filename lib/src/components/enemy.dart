@@ -7,7 +7,6 @@ import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/components/bullet.dart';
 import 'package:garbage_game/src/components/play_area.dart';
 import 'package:garbage_game/src/components/player.dart';
-import 'package:garbage_game/src/components/player_move_area.dart';
 import 'package:garbage_game/src/game.dart';
 import 'package:garbage_game/src/models/enemy_type.dart';
 
@@ -138,7 +137,7 @@ class Enemy extends PositionComponent
         game.gameBloc.killEnemy(byBullet: true, type: type);
         removeFromParent();
       }
-    } else if (other is PlayerMoveArea || other is Player) {
+    } else if (other is Player) {
       game.gameBloc.killEnemy(type: type);
       add(RemoveEffect(delay: 0.2));
     }
