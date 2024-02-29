@@ -7,6 +7,7 @@ import 'package:flame/events.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/components/enemy.dart';
+import 'package:garbage_game/src/components/power_up.dart';
 import 'package:garbage_game/src/const/levels.dart';
 import 'package:garbage_game/src/models/enemy_type.dart';
 
@@ -27,19 +28,26 @@ class GarbageGame extends FlameGame
 
   double get width => size.x;
   double get height => size.y;
+
   final rand = math.Random();
   final GameBloc gameBloc;
   late Player player;
 
   late final Timer _shootTimer = Timer(
     0.2,
-    onTick: () => shoot(),
+    onTick: () => _shoot(),
     repeat: true,
   );
 
   late final Timer _enemyTimer = Timer(
     1,
-    onTick: () => addEnemies(),
+    onTick: () => _addEnemies(),
+    repeat: true,
+  );
+
+  late final Timer _powerUpTimer = Timer(
+    4,
+    onTick: () => _addPowerUp(),
     repeat: true,
   );
 
@@ -71,13 +79,14 @@ class GarbageGame extends FlameGame
             case GameStatus.gameOver:
               currentEnemies = state.currentLevel.enemies;
               overlays.add(state.status.name);
-              _enemyTimer.pause();
               _shootTimer.pause();
+              _enemyTimer.pause();
+              _powerUpTimer.pause();
               break;
 
             case GameStatus.restarting:
-              removeEnemiesFromScreen();
-              restartEnemiesPrintedCounter();
+              _removeEnemiesFromScreen();
+              _restartEnemiesPrintedCounter();
               isPrintedCompleted = false;
               currentEnemies = state.currentLevel.enemies;
               break;
@@ -86,8 +95,9 @@ class GarbageGame extends FlameGame
               overlays.remove(GameStatus.paused.name);
               overlays.remove(GameStatus.wonLevel.name);
               overlays.remove(GameStatus.gameOver.name);
-              _enemyTimer.resume();
               _shootTimer.resume();
+              _enemyTimer.resume();
+              _powerUpTimer.resume();
               break;
           }
         },
@@ -118,6 +128,7 @@ class GarbageGame extends FlameGame
 
     _shootTimer.start();
     _enemyTimer.start();
+    _powerUpTimer.start();
 
     //debugMode = true;
   }
@@ -127,9 +138,28 @@ class GarbageGame extends FlameGame
     super.update(dt);
     _shootTimer.update(dt);
     _enemyTimer.update(dt);
+    _powerUpTimer.update(dt);
   }
 
-  void shoot() {
+  void _addPowerUp() {
+    final hasToPrint = rand.nextBool();
+    if (!hasToPrint) return;
+
+    final minWidth = width / 6;
+    final maxWidth = width - (width / 6);
+    final newRand =
+        minWidth + rand.nextInt(maxWidth.toInt() - minWidth.toInt() + 1);
+
+    world.add(
+      PowerUp(
+        size: Vector2(width * 0.06, width * 0.06),
+        position: Vector2(newRand, -100),
+        speed: 100,
+      ),
+    );
+  }
+
+  void _shoot() {
     world.add(
       Bullet(
         size: Vector2(width * 0.02, width * 0.02),
@@ -139,7 +169,7 @@ class GarbageGame extends FlameGame
     );
   }
 
-  Future<void> addEnemies() async {
+  Future<void> _addEnemies() async {
     final bool isPrintedCompleted = currentLevelPrintedEnemies.entries.every(
         (entry) =>
             currentEnemies.containsKey(entry.key) &&
@@ -155,6 +185,7 @@ class GarbageGame extends FlameGame
     if (isPrintedCompleted || enemyKeys.isEmpty) {
       this.isPrintedCompleted = true;
       _enemyTimer.pause();
+      _powerUpTimer.pause();
       return;
     }
 
@@ -195,12 +226,12 @@ class GarbageGame extends FlameGame
       if (newMinorXPosition > minWidth) {
         lastMinorXPosition = newMinorXPosition;
         enemies.add(
-          getEnemyByEnemyType(enemyType, newMinorXPosition),
+          _getEnemyByEnemyType(enemyType, newMinorXPosition),
         );
       } else if (newMajorXPosition < maxWidth) {
         lastMajorXPosition = newMajorXPosition;
         enemies.add(
-          getEnemyByEnemyType(enemyType, newMajorXPosition),
+          _getEnemyByEnemyType(enemyType, newMajorXPosition),
         );
       }
     }
@@ -212,7 +243,7 @@ class GarbageGame extends FlameGame
         (currentLevelPrintedEnemies[enemyType] ?? 0) + enemies.length;
   }
 
-  Enemy getEnemyByEnemyType(EnemyType type, double xPosition) {
+  Enemy _getEnemyByEnemyType(EnemyType type, double xPosition) {
     switch (type) {
       case EnemyType.slow:
         return Enemy.slow(
@@ -233,14 +264,14 @@ class GarbageGame extends FlameGame
     }
   }
 
-  void removeEnemiesFromScreen() {
+  void _removeEnemiesFromScreen() {
     final enemiesInScreen = world.children.query<Enemy>();
     for (var enemy in enemiesInScreen) {
       enemy.removeFromParent();
     }
   }
 
-  void restartEnemiesPrintedCounter() {
+  void _restartEnemiesPrintedCounter() {
     currentLevelPrintedEnemies = {
       EnemyType.slow: 0,
       EnemyType.normal: 0,
