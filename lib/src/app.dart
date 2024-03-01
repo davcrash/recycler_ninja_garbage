@@ -82,8 +82,20 @@ class GameApp extends StatelessWidget {
                         powerUpBloc: context.read<PowerUpBloc>(),
                       ),
                       overlayBuilderMap: {
-                        GameStatus.paused.name: (context, game) => const Center(
-                              child: Text("PAUSED"),
+                        GameStatus.paused.name: (context, game) => Center(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Text("PAUSED"),
+                                  BlocBuilder<PowerUpBloc, PowerUpState>(
+                                    builder: (context, state) {
+                                      return Text(
+                                        '${state.powersLevel}',
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
                         GameStatus.wonLevel.name: (context, game) => Center(
                               child: Column(
