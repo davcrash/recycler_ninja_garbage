@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:garbage_game/src/game.dart';
 
 class PlayArea extends RectangleComponent with HasGameReference<GarbageGame> {
-  PlayArea()
+  PlayArea({Color? color})
       : super(
-          paint: Paint()..color = Colors.white,
+          paint: Paint()..color = color ?? Colors.white,
           children: [RectangleHitbox()],
         );
 

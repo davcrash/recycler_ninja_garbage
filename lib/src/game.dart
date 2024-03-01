@@ -24,6 +24,7 @@ class GarbageGame extends FlameGame
   GarbageGame({
     required this.gameBloc,
     required this.powerUpBloc,
+    required this.scaffoldBackgroundColor,
   }) : super(
           camera: CameraComponent.withFixedResolution(
             width: 820.0,
@@ -37,6 +38,7 @@ class GarbageGame extends FlameGame
   final rand = math.Random();
   final GameBloc gameBloc;
   final PowerUpBloc powerUpBloc;
+  final Color scaffoldBackgroundColor;
   late Player player;
 
   late final Timer _shootTimer = Timer(
@@ -174,7 +176,7 @@ class GarbageGame extends FlameGame
       ),
     );
 
-    world.add(PlayArea());
+    world.add(PlayArea(color: scaffoldBackgroundColor));
 
     player = Player(
       size: Vector2(width * 0.08, playerHeight),
@@ -405,5 +407,5 @@ class GarbageGame extends FlameGame
   }
 
   @override
-  Color backgroundColor() => Colors.grey;
+  Color backgroundColor() => scaffoldBackgroundColor;
 }
