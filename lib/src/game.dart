@@ -7,6 +7,7 @@ import 'package:flame/events.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/bloc/power_up/power_up_bloc.dart';
+import 'package:garbage_game/src/components/bounce_bullet.dart';
 import 'package:garbage_game/src/components/enemy.dart';
 import 'package:garbage_game/src/components/power_up.dart';
 import 'package:garbage_game/src/const/levels.dart';
@@ -38,7 +39,7 @@ class GarbageGame extends FlameGame
   late Player player;
 
   late final Timer _shootTimer = Timer(
-    0.2,
+    0.3,
     onTick: () => _shoot(),
     repeat: true,
   );
@@ -52,6 +53,12 @@ class GarbageGame extends FlameGame
   late final Timer _powerUpTimer = Timer(
     4,
     onTick: () => _addPowerUp(),
+    repeat: true,
+  );
+
+  late final Timer _bounceShootTimer = Timer(
+    3,
+    onTick: () => _bounceShoot(),
     repeat: true,
   );
 
@@ -82,18 +89,22 @@ class GarbageGame extends FlameGame
             case GameStatus.wonLevel:
             case GameStatus.gameOver:
               _removePowerUpsFromScreen();
+              _removeBulletsFromScreen();
               _restartEnemiesPrintedCounter();
               currentEnemies = state.currentLevel.enemies;
               overlays.add(state.status.name);
               _shootTimer.pause();
               _enemyTimer.pause();
               _powerUpTimer.pause();
+              _bounceShootTimer.pause();
+
               break;
 
             case GameStatus.restarting:
               _restartEnemiesPrintedCounter();
               _removeEnemiesFromScreen();
               _removePowerUpsFromScreen();
+              _removeBulletsFromScreen();
               isPrintedCompleted = false;
               currentEnemies = state.currentLevel.enemies;
               break;
@@ -105,6 +116,7 @@ class GarbageGame extends FlameGame
               _shootTimer.resume();
               _enemyTimer.resume();
               _powerUpTimer.resume();
+              _bounceShootTimer.resume();
               break;
           }
         },
@@ -137,6 +149,13 @@ class GarbageGame extends FlameGame
             case PowerUpType.nuclearBomb:
               _removeEnemiesFromScreen(sumInScore: true);
               break;
+            case PowerUpType.machineGun:
+              final currentLimit = _shootTimer.limit;
+              if (currentLimit <= 0.01) return;
+              final newLimit = _shootTimer.limit - 0.01;
+              _shootTimer.limit = newLimit <= 0.01 ? 0.01 : newLimit;
+              break;
+
             default:
           }
         },
@@ -154,6 +173,7 @@ class GarbageGame extends FlameGame
     _shootTimer.start();
     _enemyTimer.start();
     _powerUpTimer.start();
+    _bounceShootTimer.start();
 
     //debugMode = true;
   }
@@ -164,6 +184,7 @@ class GarbageGame extends FlameGame
     _shootTimer.update(dt);
     _enemyTimer.update(dt);
     _powerUpTimer.update(dt);
+    _bounceShootTimer.update(dt);
   }
 
   void _addPowerUp() {
@@ -195,6 +216,28 @@ class GarbageGame extends FlameGame
         velocity: Vector2(0, -1).normalized()..scale(height),
       ),
     );
+  }
+
+  void _bounceShoot() {
+    final currentPowers = powerUpBloc.state.powersLevel;
+    final hasBounceBullet =
+        currentPowers.keys.contains(PowerUpType.bounceBullet);
+    if (!hasBounceBullet) return;
+    final bounceLevel = currentPowers[PowerUpType.bounceBullet];
+
+    final shootCount = ((bounceLevel ?? 0) / 3).round() + 1;
+
+    for (var i = 0; i < shootCount; i++) {
+      world.add(
+        BounceBullet(
+          size: Vector2(width * 0.03, width * 0.03),
+          position: player.position,
+          velocity: Vector2((rand.nextDouble() - 0.5) * width, height * -0.2)
+              .normalized()
+            ..scale(height / 3),
+        ),
+      );
+    }
   }
 
   Future<void> _addEnemies() async {
@@ -312,8 +355,15 @@ class GarbageGame extends FlameGame
 
   void _removePowerUpsFromScreen() async {
     final powersInScreen = [...world.children.query<PowerUp>()];
-    for (var enemy in powersInScreen) {
-      enemy.removeFromParent();
+    for (var power in powersInScreen) {
+      power.removeFromParent();
+    }
+  }
+
+  void _removeBulletsFromScreen() async {
+    final bounceBulletInScreen = [...world.children.query<BounceBullet>()];
+    for (var bullet in bounceBulletInScreen) {
+      bullet.removeFromParent();
     }
   }
 
