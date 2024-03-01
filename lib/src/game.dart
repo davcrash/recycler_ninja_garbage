@@ -5,6 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/events.dart';
 import 'package:flame_bloc/flame_bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/bloc/power_up/power_up_bloc.dart';
 import 'package:garbage_game/src/components/enemy.dart';
@@ -402,4 +403,7 @@ class GarbageGame extends FlameGame
       EnemyType.fast: 0,
     };
   }
+
+  @override
+  Color backgroundColor() => Colors.grey;
 }

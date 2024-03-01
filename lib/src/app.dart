@@ -52,7 +52,7 @@ class GameApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           title: Text(
-            "HOLA | |",
+            "HELLO | |",
             style: Theme.of(context).textTheme.headlineLarge,
           ),
         ),
