@@ -7,10 +7,10 @@ import 'package:flame/events.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/bloc/power_up/power_up_bloc.dart';
-import 'package:garbage_game/src/components/bounce_bullet.dart';
 import 'package:garbage_game/src/components/enemy.dart';
 import 'package:garbage_game/src/components/power_up.dart';
 import 'package:garbage_game/src/const/levels.dart';
+import 'package:garbage_game/src/models/bullet_type.dart';
 import 'package:garbage_game/src/models/enemy_type.dart';
 import 'package:garbage_game/src/models/power_up_type.dart';
 
@@ -62,6 +62,12 @@ class GarbageGame extends FlameGame
     repeat: true,
   );
 
+  late final Timer _bigShootTimer = Timer(
+    4,
+    onTick: () => _bigShoot(),
+    repeat: true,
+  );
+
   Map<EnemyType, int> currentLevelPrintedEnemies = {
     EnemyType.slow: 0,
     EnemyType.normal: 0,
@@ -88,15 +94,19 @@ class GarbageGame extends FlameGame
             case GameStatus.paused:
             case GameStatus.wonLevel:
             case GameStatus.gameOver:
-              _removePowerUpsFromScreen();
-              _removeBulletsFromScreen();
-              _restartEnemiesPrintedCounter();
-              currentEnemies = state.currentLevel.enemies;
-              overlays.add(state.status.name);
+              if (state.status == GameStatus.wonLevel ||
+                  state.status == GameStatus.gameOver) {
+                _removePowerUpsFromScreen();
+                _removeBulletsFromScreen();
+                _restartEnemiesPrintedCounter();
+                currentEnemies = state.currentLevel.enemies;
+              }
               _shootTimer.pause();
               _enemyTimer.pause();
               _powerUpTimer.pause();
               _bounceShootTimer.pause();
+              _bigShootTimer.pause();
+              overlays.add(state.status.name);
 
               break;
 
@@ -117,6 +127,7 @@ class GarbageGame extends FlameGame
               _enemyTimer.resume();
               _powerUpTimer.resume();
               _bounceShootTimer.resume();
+              _bigShootTimer.resume();
               break;
           }
         },
@@ -174,6 +185,7 @@ class GarbageGame extends FlameGame
     _enemyTimer.start();
     _powerUpTimer.start();
     _bounceShootTimer.start();
+    _bigShootTimer.start();
 
     //debugMode = true;
   }
@@ -185,6 +197,7 @@ class GarbageGame extends FlameGame
     _enemyTimer.update(dt);
     _powerUpTimer.update(dt);
     _bounceShootTimer.update(dt);
+    _bigShootTimer.update(dt);
   }
 
   void _addPowerUp() {
@@ -229,15 +242,38 @@ class GarbageGame extends FlameGame
 
     for (var i = 0; i < shootCount; i++) {
       world.add(
-        BounceBullet(
+        Bullet(
           size: Vector2(width * 0.03, width * 0.03),
           position: player.position,
           velocity: Vector2((rand.nextDouble() - 0.5) * width, height * -0.2)
               .normalized()
             ..scale(height / 3),
+          type: BulletType.bounce,
         ),
       );
     }
+  }
+
+  void _bigShoot() {
+    world.add(
+      Bullet(
+        size: Vector2(width * 0.05, width * 0.05),
+        position: player.position,
+        velocity: Vector2(0, -1).normalized()..scale(height / 2.5),
+        type: BulletType.big,
+      ),
+    );
+    final currentPowers = powerUpBloc.state.powersLevel;
+    final hasBigBullet = currentPowers.keys.contains(PowerUpType.bigGun);
+    if (!hasBigBullet) return;
+    world.add(
+      Bullet(
+        size: Vector2(width * 0.05, width * 0.05),
+        position: player.position,
+        velocity: Vector2(0, -1).normalized()..scale(height / 2.5),
+        type: BulletType.big,
+      ),
+    );
   }
 
   Future<void> _addEnemies() async {
@@ -361,8 +397,8 @@ class GarbageGame extends FlameGame
   }
 
   void _removeBulletsFromScreen() async {
-    final bounceBulletInScreen = [...world.children.query<BounceBullet>()];
-    for (var bullet in bounceBulletInScreen) {
+    final bulletInScreen = [...world.children.query<Bullet>()];
+    for (var bullet in bulletInScreen) {
       bullet.removeFromParent();
     }
   }

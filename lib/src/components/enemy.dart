@@ -3,11 +3,11 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
-import 'package:garbage_game/src/components/bounce_bullet.dart';
 import 'package:garbage_game/src/components/bullet.dart';
 import 'package:garbage_game/src/components/play_area.dart';
 import 'package:garbage_game/src/components/player.dart';
 import 'package:garbage_game/src/game.dart';
+import 'package:garbage_game/src/models/bullet_type.dart';
 import 'package:garbage_game/src/models/enemy_type.dart';
 
 class Enemy extends PositionComponent
@@ -133,8 +133,8 @@ class Enemy extends PositionComponent
     PositionComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
-    if (other is Bullet || other is BounceBullet) {
-      lifePoints -= other is BounceBullet ? 2 : 1;
+    if (other is Bullet) {
+      lifePoints -= other.type == BulletType.bounce ? 2 : 1;
       if (lifePoints <= 0) {
         removeFromParent();
         game.gameBloc.killEnemy(byBullet: true, type: type);
