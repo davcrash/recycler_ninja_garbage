@@ -39,7 +39,7 @@ class GarbageGame extends FlameGame
   late Player player;
 
   late final Timer _shootTimer = Timer(
-    0.3,
+    0.2,
     onTick: () => _shoot(),
     repeat: true,
   );
