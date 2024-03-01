@@ -13,7 +13,8 @@ class MainScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              "Hello ? !@#",
+              "RECYCLER NINJA\nGARBAGE",
+              textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                 color: Colors.green,
                 shadows: [

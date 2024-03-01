@@ -22,7 +22,7 @@ class GameApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /* return MaterialApp(
+    return MaterialApp(
       theme: ThemeData(
         useMaterial3: false,
         fontFamily: 'FutilePro',
@@ -46,7 +46,7 @@ class GameApp extends StatelessWidget {
         ),
       ),
       home: const MainScreen(),
-    ); */
+    );
     return MaterialApp(
       theme: ThemeData(fontFamily: 'FutilePro'),
       home: Scaffold(
