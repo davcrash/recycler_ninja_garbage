@@ -255,14 +255,6 @@ class GarbageGame extends FlameGame
   }
 
   void _bigShoot() {
-    world.add(
-      Bullet(
-        size: Vector2(width * 0.05, width * 0.05),
-        position: player.position,
-        velocity: Vector2(0, -1).normalized()..scale(height / 2.5),
-        type: BulletType.big,
-      ),
-    );
     final currentPowers = powerUpBloc.state.powersLevel;
     final hasBigBullet = currentPowers.keys.contains(PowerUpType.bigGun);
     if (!hasBigBullet) return;
