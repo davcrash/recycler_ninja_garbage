@@ -6,6 +6,7 @@ import 'package:flame/game.dart';
 import 'package:flame/events.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/bloc/power_up/power_up_bloc.dart';
 import 'package:garbage_game/src/components/enemy.dart';
@@ -404,6 +405,32 @@ class GarbageGame extends FlameGame
       EnemyType.normal: 0,
       EnemyType.fast: 0,
     };
+  }
+
+  @override
+  KeyEventResult onKeyEvent(
+    RawKeyEvent event,
+    Set<LogicalKeyboardKey> keysPressed,
+  ) {
+    if (event is! RawKeyDownEvent) return KeyEventResult.handled;
+    switch (event.logicalKey) {
+      case LogicalKeyboardKey.arrowLeft:
+      case LogicalKeyboardKey.keyA:
+        world.children.query<Player>().first.moveBy(width * -0.03);
+      case LogicalKeyboardKey.arrowRight:
+      case LogicalKeyboardKey.keyD:
+        world.children.query<Player>().first.moveBy(width * 0.03);
+      case LogicalKeyboardKey.space:
+      case LogicalKeyboardKey.enter:
+        if (gameBloc.state.status == GameStatus.gameOver) {
+          gameBloc.restart();
+        } else if (gameBloc.state.status == GameStatus.paused ||
+            gameBloc.state.status == GameStatus.playing ||
+            gameBloc.state.status == GameStatus.wonLevel) {
+          gameBloc.pause();
+        }
+    }
+    return KeyEventResult.handled;
   }
 
   @override
