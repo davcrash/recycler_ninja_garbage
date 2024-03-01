@@ -75,7 +75,6 @@ class GameScreen extends StatelessWidget {
             Align(
               alignment: Alignment.topCenter,
               child: Container(
-                alignment: Alignment.topCenter,
                 width: 500.0,
                 constraints: const BoxConstraints(maxWidth: 500.0),
                 padding: const EdgeInsets.all(Spacing.md),
@@ -133,6 +132,45 @@ class GameScreen extends StatelessWidget {
                 ),
               ),
             ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                width: 500.0,
+                constraints: const BoxConstraints(maxWidth: 500.0),
+                padding: const EdgeInsets.all(Spacing.lg),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: Spacing.xs),
+                      child: Image.network(
+                        'https://opengameart.org/sites/default/files/heart%20pixel%20art%20254x254.png',
+                        height: 25,
+                        width: 25,
+                      ),
+                    ),
+                    BlocBuilder<GameBloc, GameState>(
+                      builder: (context, state) {
+                        return Text(
+                          '${state.playerLifePoints}',
+                          textAlign: TextAlign.center,
+                          style: baseTheme.textTheme.headlineSmall?.copyWith(
+                            color: Colors.red,
+                            shadows: [
+                              const Shadow(
+                                offset: Offset(1.7, 1.7),
+                                blurRadius: 0.0,
+                                color: Colors.black,
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            )
           ],
         ),
       ),

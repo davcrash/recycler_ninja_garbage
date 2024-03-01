@@ -180,7 +180,7 @@ class GarbageGame extends FlameGame
 
     player = Player(
       size: Vector2(width * 0.08, playerHeight),
-      position: Vector2(width / 2, height * 0.9),
+      position: Vector2(width / 2, height * 0.89),
     );
     world.add(player);
 
