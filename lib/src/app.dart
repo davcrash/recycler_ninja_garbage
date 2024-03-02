@@ -41,7 +41,11 @@ class GameApp extends StatelessWidget {
           seedColor: Colors.green,
         ),
       ),
-      home: const MainScreen(),
+      routes: {
+        '/': (context) => const MainScreen(),
+        '/game': (context) => const GameScreen(),
+      },
+      initialRoute: '/',
     );
   }
 }

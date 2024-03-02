@@ -5,6 +5,7 @@ import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/bloc/power_up/power_up_bloc.dart';
 import 'package:garbage_game/src/game.dart';
 import 'package:garbage_game/src/helpers.dart';
+import 'package:garbage_game/src/models/power_up_type.dart';
 import 'package:garbage_game/src/spacing.dart';
 
 class GameScreen extends StatelessWidget {
@@ -35,10 +36,26 @@ class GameScreen extends StatelessWidget {
                           const Text("PAUSED"),
                           BlocBuilder<PowerUpBloc, PowerUpState>(
                             builder: (context, state) {
+                              Map<PowerUpType, int> mapCopy = {
+                                ...state.powersLevel
+                              }..removeWhere(
+                                  (key, value) =>
+                                      key == PowerUpType.nuclearBomb ||
+                                      key == PowerUpType.heal,
+                                );
                               return Text(
-                                '${state.powersLevel}',
+                                '$mapCopy',
                               );
                             },
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              context.read<GameBloc>().restart();
+                              Navigator.of(context).pushReplacementNamed(
+                                "/",
+                              );
+                            },
+                            child: const Text('Exit'),
                           ),
                         ],
                       ),

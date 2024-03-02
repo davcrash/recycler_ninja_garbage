@@ -74,7 +74,11 @@ class MainScreen extends StatelessWidget {
                 ),
               ),
               BlockButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushReplacementNamed(
+                    "/game",
+                  );
+                },
                 label: "PLAY",
               ),
             ],
