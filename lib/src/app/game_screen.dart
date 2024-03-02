@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/bloc/power_up/power_up_bloc.dart';
+import 'package:garbage_game/src/bloc/score/score_bloc.dart';
 import 'package:garbage_game/src/game.dart';
 import 'package:garbage_game/src/helpers.dart';
 import 'package:garbage_game/src/models/power_up_type.dart';
@@ -50,7 +51,14 @@ class GameScreen extends StatelessWidget {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              context.read<GameBloc>().restart();
+                              final gameBloc = context.read<GameBloc>();
+                              final gameBlocState = gameBloc.state;
+                              context.read<ScoreBloc>().updateData(
+                                    enemiesKilled: gameBlocState.killedEnemies,
+                                    score: gameBlocState.score,
+                                    lvl: gameBlocState.currentLevelNumber,
+                                  );
+                              gameBloc.restart();
                               Navigator.of(context).pushReplacementNamed(
                                 "/",
                               );

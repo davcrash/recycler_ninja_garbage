@@ -19,8 +19,8 @@ class ScoreBloc extends Cubit<ScoreState> {
       ScoreState(
         enemiesKilled: data['enemiesKilled'] ?? 0,
         maxEnemiesKilled: data['maxEnemiesKilled'] ?? 0,
-        maxLvl: data['maxScore'] ?? 0,
-        maxScore: data['maxLvl'] ?? 0,
+        maxLvl: data['maxLvl'] ?? 0,
+        maxScore: data['maxScore'] ?? 0,
       ),
     );
   }
@@ -36,14 +36,17 @@ class ScoreBloc extends Cubit<ScoreState> {
         : state.maxEnemiesKilled;
     final newMaxLvl = state.maxLvl < lvl ? lvl : state.maxLvl;
     final newMaxScore = state.maxScore < score ? score : state.maxScore;
-
-    emit(
-      ScoreState(
-        enemiesKilled: newEnemiesKilled,
-        maxEnemiesKilled: newMaxEnemiesKilled,
-        maxLvl: newMaxLvl,
-        maxScore: newMaxScore,
-      ),
+    final newState = ScoreState(
+      enemiesKilled: newEnemiesKilled,
+      maxEnemiesKilled: newMaxEnemiesKilled,
+      maxLvl: newMaxLvl,
+      maxScore: newMaxScore,
     );
+
+    emit(newState);
+
+    final pref = await _pref;
+    final data = json.encode(newState.toJson());
+    pref.setString(_dataKey, data);
   }
 }
