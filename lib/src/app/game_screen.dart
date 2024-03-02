@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/bloc/power_up/power_up_bloc.dart';
 import 'package:garbage_game/src/game.dart';
+import 'package:garbage_game/src/helpers.dart';
 import 'package:garbage_game/src/spacing.dart';
-import 'package:intl/intl.dart';
 
 class GameScreen extends StatelessWidget {
   const GameScreen({super.key});
@@ -13,7 +13,7 @@ class GameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final baseTheme = Theme.of(context);
-    final formatter = NumberFormat('#,###');
+
     return MediaQuery.removePadding(
       context: context,
       removeTop: true,
@@ -114,7 +114,7 @@ class GameScreen extends StatelessWidget {
                     BlocBuilder<GameBloc, GameState>(
                       builder: (context, state) {
                         return Text(
-                          formatter.format(state.score),
+                          numberFormatter.format(state.score),
                           textAlign: TextAlign.center,
                           style: baseTheme.textTheme.headlineSmall?.copyWith(
                             color: Colors.green,

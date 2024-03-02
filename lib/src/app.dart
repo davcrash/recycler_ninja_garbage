@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:garbage_game/src/app/game_screen.dart';
+import 'package:garbage_game/src/app/main_screen.dart';
 
 class GameApp extends StatelessWidget {
   const GameApp({super.key});
@@ -40,7 +41,7 @@ class GameApp extends StatelessWidget {
           seedColor: Colors.green,
         ),
       ),
-      home: const GameScreen(),
+      home: const MainScreen(),
     );
   }
 }
