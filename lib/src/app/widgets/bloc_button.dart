@@ -37,7 +37,7 @@ class BlockButton extends StatelessWidget {
             : Text(
                 label,
                 style: const TextStyle().copyWith(
-                  fontSize: theme.textTheme.titleMedium?.fontSize,
+                  fontSize: theme.textTheme.titleLarge?.fontSize,
                   fontWeight: FontWeight.w900,
                 ),
               ),
