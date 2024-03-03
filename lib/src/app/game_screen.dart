@@ -135,6 +135,7 @@ class GameScreen extends StatelessWidget {
                 if (state is bloc.OverlayShowed) {
                   return OverlayScreen(
                     type: state.type,
+                    powerUpType: state.powerUpType,
                   );
                 }
                 return Container();

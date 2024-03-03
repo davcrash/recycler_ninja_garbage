@@ -3,6 +3,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
+import 'package:garbage_game/src/bloc/overlay/overlay_bloc.dart';
 import 'package:garbage_game/src/components/player.dart';
 import 'package:garbage_game/src/game.dart';
 import 'package:garbage_game/src/models/power_up_type.dart';
@@ -75,6 +76,7 @@ class PowerUp extends PositionComponent
         ),
       );
       add(RemoveEffect(delay: 0.2));
+      game.overlayBloc.show(type: OverlayType.caughtPower, powerUpType: type);
       game.powerUpBloc.catchAPower(type: type);
     }
   }
