@@ -67,13 +67,13 @@ class _PowerUpAnimationState extends State<PowerUpAnimation>
         children: [
           const FlutterLogo(size: 1),
           Padding(
-            padding: const EdgeInsets.only(top: .3),
+            padding: const EdgeInsets.only(top: .2),
             child: Text(
               //TODO: poner nombre a los poderes
               widget.powerUpType.toString(),
               textAlign: TextAlign.center,
               style: baseTheme.textTheme.bodySmall?.copyWith(
-                fontSize: 0.3,
+                fontSize: 0.2,
                 color: Colors.blue,
               ),
             ),

@@ -58,7 +58,7 @@ class GarbageGame extends FlameGame
   );
 
   late final Timer _powerUpTimer = Timer(
-    5,
+    .5,
     onTick: () => _addPowerUp(),
     repeat: true,
   );
