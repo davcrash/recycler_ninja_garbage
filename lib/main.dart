@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:garbage_game/src/app.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
+import 'package:garbage_game/src/bloc/overlay/overlay_bloc.dart';
 import 'package:garbage_game/src/bloc/power_up/power_up_bloc.dart';
 import 'package:garbage_game/src/bloc/score/score_bloc.dart';
 
@@ -22,6 +23,9 @@ void main() {
         ),
         BlocProvider<ScoreBloc>(
           create: (context) => ScoreBloc()..init(),
+        ),
+        BlocProvider<OverlayBloc>(
+          create: (context) => OverlayBloc(),
         ),
       ],
       child: const GameApp(),

@@ -10,6 +10,7 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final baseTheme = Theme.of(context);
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -26,9 +27,8 @@ class MainScreen extends StatelessWidget {
                       Text(
                         "RECYCLER NINJA\nGARBAGE",
                         textAlign: TextAlign.center,
-                        style:
-                            Theme.of(context).textTheme.headlineLarge?.copyWith(
-                          color: Colors.green,
+                        style: baseTheme.textTheme.headlineLarge?.copyWith(
+                          color: baseTheme.colorScheme.primary,
                           shadows: [
                             const Shadow(
                               offset: Offset(2.0, 2.0),

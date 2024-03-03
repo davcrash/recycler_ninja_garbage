@@ -8,6 +8,7 @@ import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
+import 'package:garbage_game/src/bloc/overlay/overlay_bloc.dart';
 import 'package:garbage_game/src/bloc/power_up/power_up_bloc.dart';
 import 'package:garbage_game/src/components/enemy.dart';
 import 'package:garbage_game/src/components/power_up.dart';
@@ -25,6 +26,7 @@ class GarbageGame extends FlameGame
   GarbageGame({
     required this.gameBloc,
     required this.powerUpBloc,
+    required this.overlayBloc,
     required this.scaffoldBackgroundColor,
   }) : super(
           camera: CameraComponent.withFixedResolution(
@@ -39,6 +41,7 @@ class GarbageGame extends FlameGame
   final rand = math.Random();
   final GameBloc gameBloc;
   final PowerUpBloc powerUpBloc;
+  final OverlayBloc overlayBloc;
   final Color scaffoldBackgroundColor;
   late Player player;
 
@@ -110,8 +113,7 @@ class GarbageGame extends FlameGame
               _powerUpTimer.pause();
               _bounceShootTimer.pause();
               _bigShootTimer.pause();
-              overlays.add(state.status.name);
-
+              overlayBloc.show(type: _getOverlayTypeByGameStatus(state.status));
               break;
 
             case GameStatus.restarting:
@@ -124,9 +126,7 @@ class GarbageGame extends FlameGame
               break;
             case GameStatus.playing:
             default:
-              overlays.remove(GameStatus.paused.name);
-              overlays.remove(GameStatus.wonLevel.name);
-              overlays.remove(GameStatus.gameOver.name);
+              overlayBloc.hide();
               _shootTimer.resume();
               _enemyTimer.resume();
               _powerUpTimer.resume();
@@ -202,6 +202,18 @@ class GarbageGame extends FlameGame
     _powerUpTimer.update(dt);
     _bounceShootTimer.update(dt);
     _bigShootTimer.update(dt);
+  }
+
+  OverlayType _getOverlayTypeByGameStatus(GameStatus status) {
+    switch (status) {
+      case GameStatus.gameOver:
+        return OverlayType.gameOver;
+      case GameStatus.wonLevel:
+        return OverlayType.wonLevel;
+      case GameStatus.paused:
+      default:
+        return OverlayType.paused;
+    }
   }
 
   void _addPowerUp() {

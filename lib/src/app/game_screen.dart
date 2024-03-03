@@ -1,12 +1,12 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:garbage_game/src/app/overlay/overlay_screen.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
+import 'package:garbage_game/src/bloc/overlay/overlay_bloc.dart' as bloc;
 import 'package:garbage_game/src/bloc/power_up/power_up_bloc.dart';
-import 'package:garbage_game/src/bloc/score/score_bloc.dart';
 import 'package:garbage_game/src/game.dart';
 import 'package:garbage_game/src/helpers.dart';
-import 'package:garbage_game/src/models/power_up_type.dart';
 import 'package:garbage_game/src/spacing.dart';
 
 class GameScreen extends StatelessWidget {
@@ -27,76 +27,9 @@ class GameScreen extends StatelessWidget {
               game: GarbageGame(
                 gameBloc: context.read<GameBloc>(),
                 powerUpBloc: context.read<PowerUpBloc>(),
+                overlayBloc: context.read<bloc.OverlayBloc>(),
                 scaffoldBackgroundColor: baseTheme.scaffoldBackgroundColor,
               ),
-              overlayBuilderMap: {
-                GameStatus.paused.name: (context, game) => Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text("PAUSED"),
-                          BlocBuilder<PowerUpBloc, PowerUpState>(
-                            builder: (context, state) {
-                              Map<PowerUpType, int> mapCopy = {
-                                ...state.powersLevel
-                              }..removeWhere(
-                                  (key, value) =>
-                                      key == PowerUpType.nuclearBomb ||
-                                      key == PowerUpType.heal,
-                                );
-                              return Text(
-                                '$mapCopy',
-                              );
-                            },
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              final gameBloc = context.read<GameBloc>();
-                              final gameBlocState = gameBloc.state;
-                              context.read<ScoreBloc>().updateData(
-                                    enemiesKilled: gameBlocState.killedEnemies,
-                                    score: gameBlocState.score,
-                                    lvl: gameBlocState.currentLevelNumber,
-                                  );
-                              gameBloc.restart();
-                              Navigator.of(context).pushReplacementNamed(
-                                "/",
-                              );
-                            },
-                            child: const Text('Exit'),
-                          ),
-                        ],
-                      ),
-                    ),
-                GameStatus.wonLevel.name: (context, game) => Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text("WON LEVEL"),
-                          ElevatedButton(
-                            onPressed: () {
-                              context.read<GameBloc>().pause();
-                            },
-                            child: const Text('continue'),
-                          ),
-                        ],
-                      ),
-                    ),
-                GameStatus.gameOver.name: (context, game) => Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text("Game over"),
-                          ElevatedButton(
-                            onPressed: () {
-                              context.read<GameBloc>().restart();
-                            },
-                            child: const Text('restart'),
-                          ),
-                        ],
-                      ),
-                    ),
-              },
             ),
             Align(
               alignment: Alignment.topCenter,
@@ -122,7 +55,7 @@ class GameScreen extends StatelessWidget {
                               textAlign: TextAlign.center,
                               style:
                                   baseTheme.textTheme.headlineSmall?.copyWith(
-                                color: Colors.green,
+                                color: baseTheme.colorScheme.primary,
                                 shadows: [
                                   const Shadow(
                                     offset: Offset(1.7, 1.7),
@@ -142,7 +75,7 @@ class GameScreen extends StatelessWidget {
                           numberFormatter.format(state.score),
                           textAlign: TextAlign.center,
                           style: baseTheme.textTheme.headlineSmall?.copyWith(
-                            color: Colors.green,
+                            color: baseTheme.colorScheme.primary,
                             shadows: [
                               const Shadow(
                                 offset: Offset(2.0, 2.0),
@@ -196,6 +129,16 @@ class GameScreen extends StatelessWidget {
                   ],
                 ),
               ),
+            ),
+            BlocBuilder<bloc.OverlayBloc, bloc.OverlayState>(
+              builder: (context, state) {
+                if (state is bloc.OverlayShowed) {
+                  return OverlayScreen(
+                    type: state.type,
+                  );
+                }
+                return Container();
+              },
             )
           ],
         ),
