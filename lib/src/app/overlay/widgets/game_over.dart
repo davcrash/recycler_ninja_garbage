@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:garbage_game/src/app/widgets/bloc_button.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
-import 'package:garbage_game/src/bloc/score/score_bloc.dart';
 import 'package:garbage_game/src/spacing.dart';
 
 class GameOver extends StatelessWidget {
@@ -55,12 +54,6 @@ class GameOver extends StatelessWidget {
               ),
               onPressed: () {
                 final gameBloc = context.read<GameBloc>();
-                final gameBlocState = gameBloc.state;
-                context.read<ScoreBloc>().updateData(
-                      enemiesKilled: gameBlocState.killedEnemies,
-                      score: gameBlocState.score,
-                      lvl: gameBlocState.currentLevelNumber,
-                    );
                 gameBloc.restart();
                 Navigator.of(context).pushReplacementNamed(
                   "/",
