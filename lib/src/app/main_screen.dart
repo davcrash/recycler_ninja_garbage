@@ -50,20 +50,44 @@ class MainScreen extends StatelessWidget {
                       BlocBuilder<ScoreBloc, ScoreState>(
                         builder: (context, state) {
                           return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(
-                                'Max recycling score: ${numberFormatter.format(state.maxScore)}',
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  bottom: Spacing.sm,
+                                ),
+                                child: ScoreSection(
+                                  score: state.enemiesKilled,
+                                  label: 'Recycled enemies',
+                                  isBigger: true,
+                                ),
                               ),
-                              Text(
-                                'Max Lvl: ${numberFormatter.format(state.maxLvl)}',
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  bottom: Spacing.sm,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    ScoreSection(
+                                      score: state.maxScore,
+                                      label: 'Max recycling score',
+                                    ),
+                                    const Padding(
+                                      padding: EdgeInsets.only(
+                                        right: Spacing.md,
+                                      ),
+                                    ),
+                                    ScoreSection(
+                                      score: state.maxLvl,
+                                      label: 'Max Lvl',
+                                    ),
+                                  ],
+                                ),
                               ),
-                              Text(
-                                'Max recycled enemies: ${numberFormatter.format(state.maxEnemiesKilled)}',
-                              ),
-                              Text(
-                                'Total enemies recycled: ${numberFormatter.format(state.enemiesKilled)}',
+                              ScoreSection(
+                                score: state.maxEnemiesKilled,
+                                label: 'Max recycled enemies',
                               ),
                             ],
                           );
@@ -85,6 +109,53 @@ class MainScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class ScoreSection extends StatelessWidget {
+  const ScoreSection({
+    super.key,
+    required this.score,
+    required this.label,
+    this.isBigger = false,
+  });
+
+  final int score;
+  final String label;
+  final bool isBigger;
+
+  @override
+  Widget build(BuildContext context) {
+    final baseTheme = Theme.of(context);
+    return Column(
+      children: [
+        Text(
+          numberFormatter.format(score),
+          style: isBigger
+              ? baseTheme.textTheme.headlineMedium?.copyWith(
+                  color: baseTheme.colorScheme.primary,
+                  shadows: [
+                    const Shadow(
+                      offset: Offset(1.0, 1.0),
+                      blurRadius: 0.0,
+                      color: Colors.black,
+                    ),
+                  ],
+                )
+              : baseTheme.textTheme.headlineSmall?.copyWith(
+                  color: baseTheme.colorScheme.primary,
+                  shadows: [
+                    const Shadow(
+                      offset: Offset(1.0, 1.0),
+                      blurRadius: 0.0,
+                      color: Colors.black,
+                    ),
+                  ],
+                ),
+        ),
+        Text(label),
+      ],
     );
   }
 }
