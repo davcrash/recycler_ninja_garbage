@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:garbage_game/src/bloc/overlay/overlay_bloc.dart';
+import 'package:garbage_game/src/colors.dart' as colors;
 import 'package:garbage_game/src/models/power_up_type.dart';
 
 class PowerUpAnimation extends StatefulWidget {
@@ -74,7 +75,7 @@ class _PowerUpAnimationState extends State<PowerUpAnimation>
               textAlign: TextAlign.center,
               style: baseTheme.textTheme.bodySmall?.copyWith(
                 fontSize: 0.2,
-                color: Colors.blue,
+                color: colors.blue,
               ),
             ),
           ),

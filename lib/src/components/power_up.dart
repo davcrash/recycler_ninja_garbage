@@ -4,6 +4,7 @@ import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/bloc/overlay/overlay_bloc.dart';
+import 'package:garbage_game/src/colors.dart' as colors;
 import 'package:garbage_game/src/components/player.dart';
 import 'package:garbage_game/src/game.dart';
 import 'package:garbage_game/src/models/power_up_type.dart';
@@ -18,7 +19,7 @@ class PowerUp extends PositionComponent
     Color? color,
     int? priority,
   })  : type = type ?? PowerUpType.heal,
-        color = color ?? Colors.blue,
+        color = color ?? colors.blue,
         super(
           anchor: Anchor.center,
           children: [RectangleHitbox()],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:garbage_game/src/app/game_screen.dart';
 import 'package:garbage_game/src/app/main_screen.dart';
+import 'package:garbage_game/src/colors.dart' as colors;
 
 class GameApp extends StatelessWidget {
   const GameApp({super.key});
@@ -38,7 +39,7 @@ class GameApp extends StatelessWidget {
           shape: buttonShape,
         ),
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.green,
+          seedColor: colors.primary,
         ),
       ),
       routes: {
