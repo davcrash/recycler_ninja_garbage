@@ -1,4 +1,4 @@
-import 'dart:async' as dartAsync;
+import 'dart:async' as dart_async;
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -21,7 +21,7 @@ class Player extends SpriteAnimationGroupComponent
           priority: 5,
         );
 
-  dartAsync.Timer? _moveDebounce;
+  dart_async.Timer? _moveDebounce;
   int _movePressedCount = 0;
 
   void _loadAllAnimations() {
@@ -72,7 +72,7 @@ class Player extends SpriteAnimationGroupComponent
             current = SpriteAnimationState.idle;
           }
           _moveDebounce =
-              dartAsync.Timer(const Duration(milliseconds: 200), () {
+              dart_async.Timer(const Duration(milliseconds: 200), () {
             current = SpriteAnimationState.idle;
             _movePressedCount = 0;
           });
@@ -82,7 +82,7 @@ class Player extends SpriteAnimationGroupComponent
   }
 
   @override
-  dartAsync.FutureOr<void> onLoad() {
+  dart_async.FutureOr<void> onLoad() {
     _loadAllAnimations();
     add(RectangleHitbox(
       position: position,
