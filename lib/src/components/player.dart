@@ -1,13 +1,16 @@
+import 'dart:async' as dartAsync;
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
-import 'package:flutter/material.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/components/enemy.dart';
 import 'package:garbage_game/src/game.dart';
 
-class Player extends PositionComponent
+enum SpriteAnimationState { move, idle }
+
+class Player extends SpriteAnimationGroupComponent
     with DragCallbacks, CollisionCallbacks, HasGameReference<GarbageGame> {
   Player({
     required super.position,
@@ -18,20 +21,74 @@ class Player extends PositionComponent
           priority: 5,
         );
 
-  final _paint = Paint()
-    ..color = const Color(0xff1e6091)
-    ..style = PaintingStyle.fill;
+  dartAsync.Timer? _moveDebounce;
+  int _movePressedCount = 0;
+
+  void _loadAllAnimations() {
+    animations = {
+      SpriteAnimationState.move: _spriteAnimation(
+        'sprites/player/move.png',
+        6,
+        0.07,
+      ),
+      SpriteAnimationState.idle: _spriteAnimation(
+        'sprites/player/idle.png',
+        2,
+        0.2,
+      ),
+    };
+    current = SpriteAnimationState.idle;
+  }
+
+  SpriteAnimation _spriteAnimation(
+    String name,
+    int amount,
+    double stepTime,
+  ) {
+    return SpriteAnimation.fromFrameData(
+      game.images.fromCache(name),
+      SpriteAnimationData.sequenced(
+        amount: amount,
+        stepTime: stepTime,
+        textureSize: Vector2.all(50),
+      ),
+    );
+  }
+
+  void moveBy(double dx) {
+    if (_moveDebounce?.isActive ?? false) _moveDebounce?.cancel();
+    _movePressedCount += 1;
+    current = SpriteAnimationState.move;
+
+    add(
+      MoveToEffect(
+        Vector2(
+          (position.x + dx).clamp(width / 2, game.width - width / 2),
+          position.y,
+        ),
+        EffectController(duration: 0.4),
+        onComplete: () {
+          if (_movePressedCount == 1) {
+            current = SpriteAnimationState.idle;
+          }
+          _moveDebounce =
+              dartAsync.Timer(const Duration(milliseconds: 200), () {
+            current = SpriteAnimationState.idle;
+            _movePressedCount = 0;
+          });
+        },
+      ),
+    );
+  }
 
   @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(
-        Offset.zero & size.toSize(),
-        const Radius.circular(10 / 2),
-      ),
-      _paint,
-    );
+  dartAsync.FutureOr<void> onLoad() {
+    _loadAllAnimations();
+    add(RectangleHitbox(
+      position: position,
+      size: size,
+    ));
+    return super.onLoad();
   }
 
   @override
@@ -46,18 +103,14 @@ class Player extends PositionComponent
         newPosition > game.width - game.width / 10) {
       return;
     }
-
+    current = SpriteAnimationState.move;
     position.x = newPosition.clamp(width / 2, game.width - width / 2);
   }
 
-  void moveBy(double dx) {
-    add(MoveToEffect(
-      Vector2(
-        (position.x + dx).clamp(width / 2, game.width - width / 2),
-        position.y,
-      ),
-      EffectController(duration: 0.1),
-    ));
+  @override
+  void onDragEnd(DragEndEvent event) {
+    current = SpriteAnimationState.idle;
+    super.onDragEnd(event);
   }
 
   @override

@@ -87,10 +87,11 @@ class GarbageGame extends FlameGame
   @override
   FutureOr<void> onLoad() async {
     super.onLoad();
+    await images.loadAllImages();
+    //await images.load('player_move.png');
 
     camera.viewfinder.anchor = Anchor.topLeft;
 
-    final playerHeight = width * 0.1;
     //status listener
     await add(
       FlameBlocListener<GameBloc, GameState>(
@@ -180,7 +181,7 @@ class GarbageGame extends FlameGame
     world.add(PlayArea(color: scaffoldBackgroundColor));
 
     player = Player(
-      size: Vector2(width * 0.08, playerHeight),
+      size: Vector2(width * 0.15, width * 0.15),
       position: Vector2(width / 2, height * 0.89),
     );
     world.add(player);
