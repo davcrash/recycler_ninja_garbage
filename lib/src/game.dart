@@ -46,7 +46,7 @@ class GarbageGame extends FlameGame
   late Player player;
 
   late final Timer _shootTimer = Timer(
-    0.2,
+    0.3,
     onTick: () => _shoot(),
     repeat: true,
   );
@@ -241,7 +241,7 @@ class GarbageGame extends FlameGame
   void _shoot() {
     world.add(
       Bullet(
-        size: Vector2(width * 0.02, width * 0.02),
+        size: Vector2(12, 34),
         position: player.position,
         velocity: Vector2(0, -1).normalized()..scale(height),
       ),
@@ -260,7 +260,7 @@ class GarbageGame extends FlameGame
     for (var i = 0; i < shootCount; i++) {
       world.add(
         Bullet(
-          size: Vector2(width * 0.03, width * 0.03),
+          size: Vector2(width * 0.05, width * 0.05),
           position: player.position,
           velocity: Vector2((rand.nextDouble() - 0.5) * width, height * -0.2)
               .normalized()
@@ -277,7 +277,7 @@ class GarbageGame extends FlameGame
     if (!hasBigBullet) return;
     world.add(
       Bullet(
-        size: Vector2(width * 0.05, width * 0.05),
+        size: Vector2(73.5, 73.5),
         position: player.position,
         velocity: Vector2(0, -1).normalized()..scale(height / 2.5),
         type: BulletType.big,

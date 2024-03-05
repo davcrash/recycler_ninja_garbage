@@ -1,13 +1,15 @@
+import 'dart:async';
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flutter/material.dart';
+import 'package:flame/flame.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/components/play_area.dart';
 import 'package:garbage_game/src/game.dart';
 import 'package:garbage_game/src/components/enemy.dart';
 import 'package:garbage_game/src/models/bullet_type.dart';
 
-class Bullet extends PositionComponent
+class Bullet extends SpriteComponent
     with CollisionCallbacks, HasGameReference<GarbageGame> {
   Bullet({
     required super.size,
@@ -16,24 +18,26 @@ class Bullet extends PositionComponent
     BulletType? type,
   })  : type = type ?? BulletType.normal,
         super(
-            anchor: Anchor.center, children: [RectangleHitbox()], priority: 1);
+          sprite: type == BulletType.bounce
+              ? Sprite(Flame.images.fromCache('sprites/ball.png'))
+              : type == BulletType.big
+                  ? Sprite(Flame.images.fromCache('sprites/shuriken.png'))
+                  : Sprite(Flame.images.fromCache('sprites/kunai.png')),
+          anchor: Anchor.center,
+          children: [RectangleHitbox()],
+          priority: 1,
+        );
 
   final Vector2 velocity;
   final BulletType type;
-  final _paint = Paint()
-    ..color = Colors.orange
-    ..style = PaintingStyle.fill;
 
   @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(
-        Offset.zero & size.toSize(),
-        const Radius.circular(0),
-      ),
-      _paint,
-    );
+  FutureOr<void> onLoad() {
+    add(RectangleHitbox(
+      position: position,
+      size: size,
+    ));
+    return super.onLoad();
   }
 
   @override
