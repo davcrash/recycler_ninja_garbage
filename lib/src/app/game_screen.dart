@@ -6,6 +6,7 @@ import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/bloc/overlay/overlay_bloc.dart' as bloc;
 import 'package:garbage_game/src/bloc/power_up/power_up_bloc.dart';
 import 'package:garbage_game/src/bloc/score/score_bloc.dart';
+import 'package:garbage_game/src/colors.dart' as colors;
 import 'package:garbage_game/src/game.dart';
 import 'package:garbage_game/src/helpers.dart';
 import 'package:garbage_game/src/spacing.dart';
@@ -114,10 +115,8 @@ class GameScreen extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(right: Spacing.xs),
-                        child: Image.network(
-                          'https://opengameart.org/sites/default/files/heart%20pixel%20art%20254x254.png',
-                          height: 25,
-                          width: 25,
+                        child: Image.asset(
+                          'assets/images/sprites/heart.png',
                         ),
                       ),
                       BlocBuilder<GameBloc, GameState>(
@@ -126,7 +125,7 @@ class GameScreen extends StatelessWidget {
                             '${state.playerLifePoints}',
                             textAlign: TextAlign.center,
                             style: baseTheme.textTheme.headlineSmall?.copyWith(
-                              color: Colors.red,
+                              color: colors.red,
                               shadows: [
                                 const Shadow(
                                   offset: Offset(1.7, 1.7),
