@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
@@ -9,7 +11,7 @@ import 'package:garbage_game/src/components/player.dart';
 import 'package:garbage_game/src/game.dart';
 import 'package:garbage_game/src/models/power_up_type.dart';
 
-class PowerUp extends PositionComponent
+class PowerUp extends SpriteAnimationComponent
     with CollisionCallbacks, HasGameReference<GarbageGame> {
   PowerUp({
     required this.speed,
@@ -31,18 +33,32 @@ class PowerUp extends PositionComponent
   final Color color;
 
   @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    final paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.fill;
+  FutureOr<void> onLoad() {
+    animation = _spriteAnimation(
+      'sprites/powerup.png',
+      5,
+      0.07,
+    );
 
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(
-        Offset.zero & size.toSize(),
-        const Radius.circular(500),
+    add(RectangleHitbox(
+      position: position,
+      size: size,
+    ));
+    return super.onLoad();
+  }
+
+  SpriteAnimation _spriteAnimation(
+    String name,
+    int amount,
+    double stepTime,
+  ) {
+    return SpriteAnimation.fromFrameData(
+      game.images.fromCache(name),
+      SpriteAnimationData.sequenced(
+        amount: amount,
+        stepTime: stepTime,
+        textureSize: Vector2.all(50),
       ),
-      paint,
     );
   }
 

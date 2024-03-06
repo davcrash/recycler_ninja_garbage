@@ -58,7 +58,7 @@ class GarbageGame extends FlameGame
   );
 
   late final Timer _powerUpTimer = Timer(
-    4,
+    .4,
     onTick: () => _addPowerUp(),
     repeat: true,
   );
@@ -230,7 +230,7 @@ class GarbageGame extends FlameGame
 
     world.add(
       PowerUp(
-        size: Vector2(width * 0.06, width * 0.06),
+        size: Vector2(width * 0.09, width * 0.09),
         position: Vector2(newRand, -100),
         speed: 300,
         type: powerType,
