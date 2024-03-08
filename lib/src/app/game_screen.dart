@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,10 +48,13 @@ class GameScreen extends StatelessWidget {
               ),
             ),
             child: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage("assets/images/sprites/map.png"),
-                  fit: BoxFit.fitHeight,
+                  image: const AssetImage("assets/images/sprites/map.png"),
+                  fit:
+                      Platform.isIOS || Platform.isAndroid || Platform.isFuchsia
+                          ? BoxFit.fill
+                          : BoxFit.fitHeight,
                 ),
               ),
               child: Stack(
