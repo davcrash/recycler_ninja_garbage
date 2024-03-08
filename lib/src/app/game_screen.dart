@@ -33,42 +33,120 @@ class GameScreen extends StatelessWidget {
         context: context,
         removeTop: true,
         child: Scaffold(
-          body: Stack(
-            alignment: Alignment.center,
-            children: [
-              GameWidget(
-                game: GarbageGame(
-                  gameBloc: context.read<GameBloc>(),
-                  powerUpBloc: context.read<PowerUpBloc>(),
-                  overlayBloc: context.read<bloc.OverlayBloc>(),
-                  scaffoldBackgroundColor: baseTheme.scaffoldBackgroundColor,
+          body: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: [0.1, 0.5],
+                colors: [
+                  Color(0xffdbd5c6),
+                  Color(0xff94979e),
+                ],
+              ),
+            ),
+            child: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/images/sprites/map.png"),
+                  fit: BoxFit.fitHeight,
                 ),
               ),
-              Align(
-                alignment: Alignment.topCenter,
-                child: Container(
-                  width: 500.0,
-                  constraints: const BoxConstraints(maxWidth: 500.0),
-                  padding: const EdgeInsets.all(Spacing.md),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  GameWidget(
+                    game: GarbageGame(
+                      gameBloc: context.read<GameBloc>(),
+                      powerUpBloc: context.read<PowerUpBloc>(),
+                      overlayBloc: context.read<bloc.OverlayBloc>(),
+                      scaffoldBackgroundColor: Colors.transparent,
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      width: 500.0,
+                      constraints: const BoxConstraints(maxWidth: 500.0),
+                      padding: const EdgeInsets.all(Spacing.md),
+                      child: Column(
                         children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              context.read<GameBloc>().pause();
-                            },
-                            child: const Text('| |'),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  context.read<GameBloc>().pause();
+                                },
+                                child: const Text('| |'),
+                              ),
+                              BlocBuilder<GameBloc, GameState>(
+                                builder: (context, state) {
+                                  return Text(
+                                    'Lvl ${state.currentLevelNumber}',
+                                    textAlign: TextAlign.center,
+                                    style: baseTheme.textTheme.headlineSmall
+                                        ?.copyWith(
+                                      color: baseTheme.colorScheme.primary,
+                                      shadows: [
+                                        const Shadow(
+                                          offset: Offset(1.7, 1.7),
+                                          blurRadius: 0.0,
+                                          color: Colors.black,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                           BlocBuilder<GameBloc, GameState>(
                             builder: (context, state) {
                               return Text(
-                                'Lvl ${state.currentLevelNumber}',
+                                numberFormatter.format(state.score),
                                 textAlign: TextAlign.center,
                                 style:
                                     baseTheme.textTheme.headlineSmall?.copyWith(
                                   color: baseTheme.colorScheme.primary,
+                                  shadows: [
+                                    const Shadow(
+                                      offset: Offset(2.0, 2.0),
+                                      blurRadius: 0.0,
+                                      color: Colors.black,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      width: 500.0,
+                      constraints: const BoxConstraints(maxWidth: 500.0),
+                      padding: const EdgeInsets.all(Spacing.lg),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: Spacing.xs),
+                            child: Image.asset(
+                              'assets/images/sprites/heart.png',
+                            ),
+                          ),
+                          BlocBuilder<GameBloc, GameState>(
+                            builder: (context, state) {
+                              return Text(
+                                '${state.playerLifePoints}',
+                                textAlign: TextAlign.center,
+                                style:
+                                    baseTheme.textTheme.headlineSmall?.copyWith(
+                                  color: colors.red,
                                   shadows: [
                                     const Shadow(
                                       offset: Offset(1.7, 1.7),
@@ -82,77 +160,22 @@ class GameScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      BlocBuilder<GameBloc, GameState>(
-                        builder: (context, state) {
-                          return Text(
-                            numberFormatter.format(state.score),
-                            textAlign: TextAlign.center,
-                            style: baseTheme.textTheme.headlineSmall?.copyWith(
-                              color: baseTheme.colorScheme.primary,
-                              shadows: [
-                                const Shadow(
-                                  offset: Offset(2.0, 2.0),
-                                  blurRadius: 0.0,
-                                  color: Colors.black,
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      )
-                    ],
+                    ),
                   ),
-                ),
+                  BlocBuilder<bloc.OverlayBloc, bloc.OverlayState>(
+                    builder: (context, state) {
+                      if (state is bloc.OverlayShowed) {
+                        return OverlayScreen(
+                          type: state.type,
+                          powerUpType: state.powerUpType,
+                        );
+                      }
+                      return Container();
+                    },
+                  )
+                ],
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  width: 500.0,
-                  constraints: const BoxConstraints(maxWidth: 500.0),
-                  padding: const EdgeInsets.all(Spacing.lg),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: Spacing.xs),
-                        child: Image.asset(
-                          'assets/images/sprites/heart.png',
-                        ),
-                      ),
-                      BlocBuilder<GameBloc, GameState>(
-                        builder: (context, state) {
-                          return Text(
-                            '${state.playerLifePoints}',
-                            textAlign: TextAlign.center,
-                            style: baseTheme.textTheme.headlineSmall?.copyWith(
-                              color: colors.red,
-                              shadows: [
-                                const Shadow(
-                                  offset: Offset(1.7, 1.7),
-                                  blurRadius: 0.0,
-                                  color: Colors.black,
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              BlocBuilder<bloc.OverlayBloc, bloc.OverlayState>(
-                builder: (context, state) {
-                  if (state is bloc.OverlayShowed) {
-                    return OverlayScreen(
-                      type: state.type,
-                      powerUpType: state.powerUpType,
-                    );
-                  }
-                  return Container();
-                },
-              )
-            ],
+            ),
           ),
         ),
       ),
