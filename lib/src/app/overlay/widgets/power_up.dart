@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:garbage_game/src/app/overlay/widgets/power_up_image.dart';
 import 'package:garbage_game/src/bloc/overlay/overlay_bloc.dart';
 import 'package:garbage_game/src/colors.dart' as colors;
 import 'package:garbage_game/src/models/power_up_type.dart';
@@ -82,60 +83,30 @@ class _PowerUpAnimationState extends State<PowerUpAnimation>
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          PowerUpImage(powerUpType: widget.powerUpType),
+          PowerUpImage(
+            powerUpType: widget.powerUpType,
+            height: 1.2,
+          ),
           Padding(
-            padding: const EdgeInsets.only(top: .2),
+            padding: const EdgeInsets.only(top: .4),
             child: Text(
               _getTextByType(),
               textAlign: TextAlign.center,
               style: baseTheme.textTheme.bodySmall?.copyWith(
-                fontSize: 0.2,
+                fontSize: 0.35,
                 color: colors.blue,
+                shadows: [
+                  const Shadow(
+                    offset: Offset(0.035, 0.035),
+                    blurRadius: 0.0,
+                    color: Colors.black,
+                  ),
+                ],
               ),
             ),
           ),
         ],
       ),
     );
-  }
-}
-
-class PowerUpImage extends StatelessWidget {
-  const PowerUpImage({
-    super.key,
-    this.powerUpType,
-  });
-  final PowerUpType? powerUpType;
-  final double height = 1.2;
-  @override
-  Widget build(BuildContext context) {
-    switch (powerUpType) {
-      case PowerUpType.bigGun:
-        return Image.asset(
-          'assets/images/sprites/shuriken.png',
-          height: height,
-        );
-      case PowerUpType.bounceBullet:
-        return Image.asset(
-          'assets/images/sprites/ball.png',
-          height: height,
-        );
-      case PowerUpType.heal:
-        return Image.asset(
-          'assets/images/sprites/heart.png',
-          height: height,
-        );
-      case PowerUpType.nuclearBomb:
-        return Image.asset(
-          'assets/images/sprites/bomb.png',
-          height: height,
-        );
-      case PowerUpType.machineGun:
-      default:
-        return Image.asset(
-          'assets/images/sprites/kunai.png',
-          height: height,
-        );
-    }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:garbage_game/src/app/overlay/widgets/power_up_image.dart';
 import 'package:garbage_game/src/app/widgets/bloc_button.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/bloc/power_up/power_up_bloc.dart';
@@ -66,7 +67,10 @@ class PauseMenu extends StatelessWidget {
                               const SizedBox(
                                 height: 30,
                                 width: 30,
-                                child: Placeholder(),
+                                child: PowerUpImage(
+                                  powerUpType: PowerUpType.machineGun,
+                                  height: 30,
+                                ),
                               ),
                               const Padding(
                                 padding: EdgeInsets.only(right: Spacing.xs),
@@ -85,7 +89,10 @@ class PauseMenu extends StatelessWidget {
                               const SizedBox(
                                 height: 30,
                                 width: 30,
-                                child: Placeholder(),
+                                child: PowerUpImage(
+                                  powerUpType: PowerUpType.bounceBullet,
+                                  height: 30,
+                                ),
                               ),
                               const Padding(
                                 padding: EdgeInsets.only(right: Spacing.xs),
@@ -104,7 +111,10 @@ class PauseMenu extends StatelessWidget {
                               const SizedBox(
                                 height: 30,
                                 width: 30,
-                                child: Placeholder(),
+                                child: PowerUpImage(
+                                  powerUpType: PowerUpType.bigGun,
+                                  height: 30,
+                                ),
                               ),
                               const Padding(
                                 padding: EdgeInsets.only(right: Spacing.xs),
