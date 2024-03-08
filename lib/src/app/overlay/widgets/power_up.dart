@@ -97,7 +97,7 @@ class _PowerUpAnimationState extends State<PowerUpAnimation>
                 color: colors.blue,
                 shadows: [
                   const Shadow(
-                    offset: Offset(0.035, 0.035),
+                    offset: Offset(0.025, 0.025),
                     blurRadius: 0.0,
                     color: Colors.black,
                   ),
