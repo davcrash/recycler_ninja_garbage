@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +10,6 @@ import 'package:garbage_game/src/spacing.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
-
   void goToGame(context) {
     Navigator.of(context).pushReplacementNamed(
       "/game",
@@ -116,6 +117,10 @@ class MainScreen extends StatelessWidget {
                   ),
                 ),
                 BlockButton(
+                  width:
+                      Platform.isIOS || Platform.isAndroid || Platform.isFuchsia
+                          ? double.infinity
+                          : 400,
                   onPressed: () {
                     goToGame(context);
                   },
