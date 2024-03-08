@@ -50,7 +50,7 @@ class Bullet extends SpriteComponent
     }
     super.update(dt);
     position += velocity * dt;
-    if (position.y < 0) {
+    if (position.y < 0 || position.y > game.height) {
       removeFromParent();
     }
   }
@@ -67,7 +67,7 @@ class Bullet extends SpriteComponent
           velocity.x = -velocity.x;
         } else if (intersectionPoints.first.x >= game.width) {
           velocity.x = -velocity.x;
-        } else if (intersectionPoints.first.y >= game.height) {
+        } else if (intersectionPoints.first.y > game.height) {
           removeFromParent();
         }
       }
