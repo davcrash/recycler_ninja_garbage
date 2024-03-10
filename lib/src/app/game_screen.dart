@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +17,8 @@ class GameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final baseTheme = Theme.of(context);
+    final shortestSide = MediaQuery.of(context).size.shortestSide;
+    final bool useMobileLayout = shortestSide < 500;
 
     return BlocListener<GameBloc, GameState>(
       listenWhen: (prevS, newS) => prevS.status != newS.status,
@@ -51,10 +51,7 @@ class GameScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: const AssetImage("assets/images/sprites/map.png"),
-                  fit:
-                      Platform.isIOS || Platform.isAndroid || Platform.isFuchsia
-                          ? BoxFit.fill
-                          : BoxFit.fitHeight,
+                  fit: useMobileLayout ? BoxFit.fill : BoxFit.fitHeight,
                 ),
               ),
               child: Stack(
