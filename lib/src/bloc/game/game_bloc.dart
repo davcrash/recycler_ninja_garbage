@@ -20,11 +20,11 @@ class GameBloc extends Cubit<GameState> {
   void wonLevel() {
     final newLevelNum = state.currentLevelNumber + 1;
     if (newLevelNum >= levels.length) {
-      final newDifficult = (newLevelNum ~/ 10) + 1;
+      final newDifficult = (newLevelNum ~/ 10);
       final currentLevel = newLevelNum % 10;
 
       Map<EnemyType, int> newEnemies = levels[currentLevel].enemies.map(
-            (key, value) => MapEntry(key, value * newDifficult),
+            (key, value) => MapEntry(key, value * (newDifficult + 1)),
           );
 
       final newHorde = Horde(enemies: newEnemies);
@@ -33,6 +33,7 @@ class GameBloc extends Cubit<GameState> {
           currentLevelNumber: newLevelNum,
           currentLevel: newHorde,
           status: GameStatus.wonLevel,
+          speedFactor: newDifficult,
         ),
       );
       return;

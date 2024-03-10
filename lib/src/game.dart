@@ -4,7 +4,6 @@ import 'dart:math' as math;
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/events.dart';
-import 'package:flame_audio/flame_audio.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -244,9 +243,7 @@ class GarbageGame extends FlameGame
   }
 
   void _shoot() {
-    if (audioBloc.state is AudioSound) {
-      FlameAudio.play('kunai.mp3', volume: .2);
-    }
+    audioBloc.playAudio('kunai.mp3', volume: .2);
     world.add(
       Bullet(
         size: Vector2(14, 40),
@@ -264,9 +261,8 @@ class GarbageGame extends FlameGame
     final bounceLevel = currentPowers[PowerUpType.bounceBullet];
 
     final shootCount = ((bounceLevel ?? 0) / 3).round() + 1;
-    if (audioBloc.state is AudioSound) {
-      FlameAudio.play('bounce.mp3', volume: .4);
-    }
+    audioBloc.playAudio('bounce.mp3', volume: .7);
+
     for (var i = 0; i < shootCount; i++) {
       world.add(
         Bullet(
@@ -285,9 +281,8 @@ class GarbageGame extends FlameGame
     final currentPowers = powerUpBloc.state.powersLevel;
     final hasBigBullet = currentPowers.keys.contains(PowerUpType.bigGun);
     if (!hasBigBullet) return;
-    if (audioBloc.state is AudioSound) {
-      FlameAudio.play('shuriken.mp3', volume: .2);
-    }
+    audioBloc.playAudio('shuriken.mp3', volume: .2);
+
     world.add(
       Bullet(
         size: Vector2(73.5, 73.5),
@@ -322,9 +317,21 @@ class GarbageGame extends FlameGame
     final minWidth = width / 6;
     final maxWidth = width - (width / 6);
 
-    final slowEnemy = Enemy.slow(gameWidth: width, position: Vector2(0, 0));
-    final normalEnemy = Enemy.normal(gameWidth: width, position: Vector2(0, 0));
-    final fastEnemy = Enemy.fast(gameWidth: width, position: Vector2(0, 0));
+    final slowEnemy = Enemy.slow(
+      gameWidth: width,
+      position: Vector2(0, 0),
+      speedFactor: 1,
+    );
+    final normalEnemy = Enemy.normal(
+      gameWidth: width,
+      position: Vector2(0, 0),
+      speedFactor: 1,
+    );
+    final fastEnemy = Enemy.fast(
+      gameWidth: width,
+      position: Vector2(0, 0),
+      speedFactor: 1,
+    );
 
     final Map<EnemyType, double> enemySizes = {
       EnemyType.slow: slowEnemy.size.x,
@@ -346,7 +353,7 @@ class GarbageGame extends FlameGame
 
     double lastMinorXPosition = newRand;
     double lastMajorXPosition = newRand;
-
+    final speedFactor = gameBloc.state.speedFactor;
     for (int i = 0; i < numEnemies; i++) {
       final newMinorXPosition =
           lastMinorXPosition - (i > 0 ? sizeFactor * 1.4 : 0);
@@ -356,12 +363,12 @@ class GarbageGame extends FlameGame
       if (newMinorXPosition > minWidth) {
         lastMinorXPosition = newMinorXPosition;
         enemies.add(
-          _getEnemyByEnemyType(enemyType, newMinorXPosition),
+          _getEnemyByEnemyType(enemyType, newMinorXPosition, speedFactor),
         );
       } else if (newMajorXPosition < maxWidth) {
         lastMajorXPosition = newMajorXPosition;
         enemies.add(
-          _getEnemyByEnemyType(enemyType, newMajorXPosition),
+          _getEnemyByEnemyType(enemyType, newMajorXPosition, speedFactor),
         );
       }
     }
@@ -373,23 +380,30 @@ class GarbageGame extends FlameGame
         (currentLevelPrintedEnemies[enemyType] ?? 0) + enemies.length;
   }
 
-  Enemy _getEnemyByEnemyType(EnemyType type, double xPosition) {
+  Enemy _getEnemyByEnemyType(
+    EnemyType type,
+    double xPosition,
+    int speedFactor,
+  ) {
     switch (type) {
       case EnemyType.slow:
         return Enemy.slow(
           gameWidth: width,
           position: Vector2(xPosition, -100),
+          speedFactor: speedFactor,
         );
       case EnemyType.fast:
         return Enemy.fast(
           gameWidth: width,
           position: Vector2(xPosition, -100),
+          speedFactor: speedFactor,
         );
       case EnemyType.normal:
       default:
         return Enemy.normal(
           gameWidth: width,
           position: Vector2(xPosition, -100),
+          speedFactor: speedFactor,
         );
     }
   }
@@ -450,22 +464,19 @@ class GarbageGame extends FlameGame
       case LogicalKeyboardKey.enter:
         if (gameBloc.state.status == GameStatus.gameOver) {
           gameBloc.restart();
-          if (audioBloc.state is AudioSound) {
-            FlameAudio.play('pause.mp3');
-            audioBloc.restart();
-          }
+          audioBloc.playAudio('pause.mp3');
+          audioBloc.restart();
         } else if (gameBloc.state.status == GameStatus.paused ||
             gameBloc.state.status == GameStatus.playing ||
             gameBloc.state.status == GameStatus.wonLevel) {
-          if (audioBloc.state is AudioSound) {
-            if (gameBloc.state.status == GameStatus.playing) {
-              audioBloc.pause();
-            }
-            if (gameBloc.state.status == GameStatus.paused) {
-              audioBloc.resume();
-            }
-            FlameAudio.play('pause.mp3');
+          if (gameBloc.state.status == GameStatus.playing) {
+            audioBloc.pause();
           }
+          if (gameBloc.state.status == GameStatus.paused) {
+            audioBloc.resume();
+          }
+          audioBloc.playAudio('pause.mp3');
+
           gameBloc.pause();
         }
     }

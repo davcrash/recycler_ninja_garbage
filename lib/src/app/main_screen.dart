@@ -30,9 +30,8 @@ class MainScreen extends StatelessWidget {
           if (event.isKeyPressed(LogicalKeyboardKey.enter) ||
               event.isKeyPressed(LogicalKeyboardKey.space)) {
             final audioBloc = context.read<AudioBloc>();
-            if (audioBloc.state is AudioSound) {
-              audioBloc.restart();
-            }
+            audioBloc.restart();
+
             goToGame(context);
           }
         },
@@ -162,9 +161,8 @@ class MainScreen extends StatelessWidget {
                           : 400,
                   onPressed: () {
                     final audioBloc = context.read<AudioBloc>();
-                    if (audioBloc.state is AudioSound) {
-                      audioBloc.restart();
-                    }
+                    audioBloc.restart();
+
                     goToGame(context);
                   },
                   label: "PLAY",

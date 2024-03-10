@@ -12,15 +12,18 @@ class AudioBloc extends Cubit<AudioState> {
   final AudioPlayer audioPlayer;
 
   void restart() {
+    if (state is AudioMuted) return;
     audioPlayer.stop();
     audioPlayer.resume();
   }
 
   void pause() {
+    if (state is AudioMuted) return;
     audioPlayer.pause();
   }
 
   void resume() {
+    if (state is AudioMuted) return;
     audioPlayer.resume();
   }
 
@@ -32,5 +35,13 @@ class AudioBloc extends Cubit<AudioState> {
     }
     if (resume) audioPlayer.resume();
     emit(AudioSound());
+  }
+
+  void playAudio(String name, {double volume = 1.0}) {
+    try {
+      if (state is AudioSound) {
+        FlameAudio.play(name, volume: volume);
+      }
+    } catch (_) {}
   }
 }

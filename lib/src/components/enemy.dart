@@ -2,8 +2,6 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame_audio/flame_audio.dart';
-import 'package:garbage_game/src/bloc/audio/audio_bloc.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/components/bullet.dart';
 import 'package:garbage_game/src/components/play_area.dart';
@@ -40,10 +38,11 @@ class Enemy extends SpriteAnimationComponent
   factory Enemy.fast({
     required double gameWidth,
     required Vector2? position,
+    required int speedFactor,
   }) {
     return Enemy(
       type: EnemyType.fast,
-      speed: 190,
+      speed: multiplyNumberNTimes(190, 1.03, speedFactor),
       position: position,
       size: Vector2(gameWidth * 0.07, gameWidth * 0.07),
       lifePoints: 1,
@@ -53,10 +52,11 @@ class Enemy extends SpriteAnimationComponent
   factory Enemy.slow({
     required double gameWidth,
     required Vector2? position,
+    required int speedFactor,
   }) {
     return Enemy(
       type: EnemyType.slow,
-      speed: 80,
+      speed: multiplyNumberNTimes(80, 1.03, speedFactor),
       position: position,
       size: Vector2(gameWidth * 0.14, gameWidth * 0.14),
       lifePoints: 4,
@@ -66,12 +66,21 @@ class Enemy extends SpriteAnimationComponent
   factory Enemy.normal({
     required double gameWidth,
     required Vector2? position,
+    required int speedFactor,
   }) {
     return Enemy(
-      speed: 130,
+      speed: multiplyNumberNTimes(130, 1.03, speedFactor),
       position: position,
       size: Vector2(gameWidth * 0.09, gameWidth * 0.09),
     );
+  }
+
+  static double multiplyNumberNTimes(double number, double factor, int times) {
+    double result = number;
+    for (int i = 0; i < times; i++) {
+      result *= factor;
+    }
+    return result;
   }
 
   void _loadAnimation() {
@@ -167,9 +176,7 @@ class Enemy extends SpriteAnimationComponent
     if (other is Bullet) {
       lifePoints -= other.type == BulletType.bounce ? 2 : 1;
       if (lifePoints <= 0) {
-        if (game.audioBloc.state is AudioSound) {
-          FlameAudio.play('kill.mp3', volume: .4);
-        }
+        game.audioBloc.playAudio('kill.mp3', volume: .4);
         removeFromParent();
         game.gameBloc.killEnemy(byBullet: true, type: type);
       }

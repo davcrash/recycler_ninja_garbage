@@ -1,5 +1,4 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:garbage_game/src/app/widgets/bloc_button.dart';
@@ -44,11 +43,9 @@ class GameOver extends StatelessWidget {
             child: BlockButton(
               onPressed: () {
                 final audioBloc = context.read<AudioBloc>();
-                if (audioBloc.state is AudioSound) {
-                  FlameAudio.play('pause.mp3');
-                  audioBloc.pause();
-                  audioBloc.resume();
-                }
+                audioBloc.playAudio('pause.mp3');
+                audioBloc.pause();
+                audioBloc.resume();
                 context.read<GameBloc>().restart();
               },
               label: 'RESTART',

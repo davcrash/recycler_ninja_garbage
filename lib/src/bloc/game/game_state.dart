@@ -10,6 +10,7 @@ class GameState extends Equatable {
     this.killedEnemies = 0,
     this.score = 0,
     this.playerLifePoints = 30,
+    this.speedFactor = 1,
   });
 
   final GameStatus status;
@@ -18,6 +19,7 @@ class GameState extends Equatable {
   final int killedEnemies;
   final int score;
   final int playerLifePoints;
+  final int speedFactor;
 
   GameState copyWith({
     GameStatus? status,
@@ -26,6 +28,7 @@ class GameState extends Equatable {
     int? killedEnemies,
     int? score,
     int? playerLifePoints,
+    int? speedFactor,
   }) {
     return GameState(
       status: status ?? this.status,
@@ -34,6 +37,7 @@ class GameState extends Equatable {
       killedEnemies: killedEnemies ?? this.killedEnemies,
       score: score ?? this.score,
       playerLifePoints: playerLifePoints ?? this.playerLifePoints,
+      speedFactor: speedFactor ?? this.speedFactor,
     );
   }
 
@@ -45,5 +49,6 @@ class GameState extends Equatable {
         killedEnemies,
         score,
         playerLifePoints,
+        speedFactor,
       ];
 }
