@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:garbage_game/src/app/credits_screen.dart';
 import 'package:garbage_game/src/app/game_screen.dart';
 import 'package:garbage_game/src/app/main_screen.dart';
 import 'package:garbage_game/src/colors.dart' as colors;
@@ -45,6 +46,7 @@ class GameApp extends StatelessWidget {
       routes: {
         '/': (context) => const MainScreen(),
         '/game': (context) => const GameScreen(),
+        '/credits': (context) => const CreditsScreen(),
       },
       initialRoute: '/',
     );
