@@ -1,7 +1,7 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flutter/material.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/components/bullet.dart';
 import 'package:garbage_game/src/components/play_area.dart';
@@ -10,20 +10,18 @@ import 'package:garbage_game/src/game.dart';
 import 'package:garbage_game/src/models/bullet_type.dart';
 import 'package:garbage_game/src/models/enemy_type.dart';
 
-class Enemy extends PositionComponent
+class Enemy extends SpriteAnimationComponent
     with CollisionCallbacks, HasGameReference<GarbageGame> {
   Enemy({
     required this.speed,
     required super.position,
     required super.size,
     EnemyType? type,
-    Color? color,
     int? lifePoints,
     int? priority,
     bool? isLineal,
   })  : type = type ?? EnemyType.normal,
         lifePoints = lifePoints ?? 2,
-        color = color ?? Colors.red,
         isLineal = isLineal ?? false,
         super(
           anchor: Anchor.center,
@@ -34,7 +32,6 @@ class Enemy extends PositionComponent
   final EnemyType type;
   final double speed;
   late int lifePoints;
-  final Color color;
   final bool isLineal;
   final collisionMove = 0.9;
 
@@ -46,8 +43,7 @@ class Enemy extends PositionComponent
       type: EnemyType.fast,
       speed: 190,
       position: position,
-      size: Vector2(gameWidth * 0.05, gameWidth * 0.05),
-      color: Colors.amber,
+      size: Vector2(gameWidth * 0.07, gameWidth * 0.07),
       lifePoints: 1,
     );
   }
@@ -60,8 +56,7 @@ class Enemy extends PositionComponent
       type: EnemyType.slow,
       speed: 80,
       position: position,
-      size: Vector2(gameWidth * 0.12, gameWidth * 0.12),
-      color: Colors.orangeAccent,
+      size: Vector2(gameWidth * 0.14, gameWidth * 0.14),
       lifePoints: 4,
     );
   }
@@ -71,26 +66,60 @@ class Enemy extends PositionComponent
     required Vector2? position,
   }) {
     return Enemy(
-      speed: 155,
+      speed: 130,
       position: position,
-      size: Vector2(gameWidth * 0.07, gameWidth * 0.07),
+      size: Vector2(gameWidth * 0.09, gameWidth * 0.09),
+    );
+  }
+
+  void _loadAnimation() {
+    switch (type) {
+      case EnemyType.fast:
+        animation = _spriteAnimation(
+          'sprites/egg_enemy.png',
+          5,
+          0.08,
+          40.0,
+        );
+      case EnemyType.slow:
+        animation = _spriteAnimation(
+          'sprites/banana_enemy.png',
+          6,
+          0.1,
+          50.0,
+        );
+      case EnemyType.normal:
+      default:
+        animation = _spriteAnimation(
+          'sprites/apple_enemy.png',
+          7,
+          0.1,
+          50.0,
+        );
+    }
+  }
+
+  SpriteAnimation _spriteAnimation(
+      String name, int amount, double stepTime, double size) {
+    return SpriteAnimation.fromFrameData(
+      game.images.fromCache(name),
+      SpriteAnimationData.sequenced(
+        amount: amount,
+        stepTime: stepTime,
+        textureSize: Vector2.all(size),
+      ),
     );
   }
 
   @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    final paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.fill;
+  FutureOr<void> onLoad() {
+    _loadAnimation();
 
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(
-        Offset.zero & size.toSize(),
-        const Radius.circular(0),
-      ),
-      paint,
-    );
+    add(RectangleHitbox(
+      position: position,
+      size: size,
+    ));
+    return super.onLoad();
   }
 
   @override
