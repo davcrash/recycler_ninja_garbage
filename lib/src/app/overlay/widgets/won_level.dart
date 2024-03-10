@@ -1,6 +1,8 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:garbage_game/src/bloc/audio/audio_bloc.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/spacing.dart';
 
@@ -48,6 +50,10 @@ class WonLevel extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               context.read<GameBloc>().pause();
+              final audioBloc = context.read<AudioBloc>();
+              if (audioBloc.state is AudioSound) {
+                FlameAudio.play('pause.mp3');
+              }
             },
             child: const Text('CONTINUE'),
           ),

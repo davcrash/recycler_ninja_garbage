@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:garbage_game/src/app/widgets/bloc_button.dart';
+import 'package:garbage_game/src/bloc/audio/audio_bloc.dart';
 import 'package:garbage_game/src/bloc/score/score_bloc.dart';
 import 'package:garbage_game/src/helpers.dart';
 import 'package:garbage_game/src/spacing.dart';
@@ -28,6 +29,10 @@ class MainScreen extends StatelessWidget {
         onKey: (RawKeyEvent event) {
           if (event.isKeyPressed(LogicalKeyboardKey.enter) ||
               event.isKeyPressed(LogicalKeyboardKey.space)) {
+            final audioBloc = context.read<AudioBloc>();
+            if (audioBloc.state is AudioSound) {
+              audioBloc.restart();
+            }
             goToGame(context);
           }
         },
@@ -122,6 +127,26 @@ class MainScreen extends StatelessWidget {
                                   score: state.maxEnemiesKilled,
                                   label: 'Max recycled enemies',
                                 ),
+                                const Padding(
+                                  padding: EdgeInsets.only(top: Spacing.md),
+                                ),
+                                BlocBuilder<AudioBloc, AudioState>(
+                                  builder: (context, state) {
+                                    return IconButton(
+                                      icon: Icon(
+                                        (state is AudioMuted)
+                                            ? Icons.volume_off
+                                            : Icons.volume_up,
+                                        color: baseTheme.colorScheme.secondary,
+                                      ),
+                                      onPressed: () {
+                                        context
+                                            .read<AudioBloc>()
+                                            .mutedButtonPressed();
+                                      },
+                                    );
+                                  },
+                                ),
                               ],
                             );
                           },
@@ -136,6 +161,10 @@ class MainScreen extends StatelessWidget {
                           ? double.infinity
                           : 400,
                   onPressed: () {
+                    final audioBloc = context.read<AudioBloc>();
+                    if (audioBloc.state is AudioSound) {
+                      audioBloc.restart();
+                    }
                     goToGame(context);
                   },
                   label: "PLAY",

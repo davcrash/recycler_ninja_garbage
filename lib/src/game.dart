@@ -4,9 +4,11 @@ import 'dart:math' as math;
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/events.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:garbage_game/src/bloc/audio/audio_bloc.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/bloc/overlay/overlay_bloc.dart';
 import 'package:garbage_game/src/bloc/power_up/power_up_bloc.dart';
@@ -27,6 +29,7 @@ class GarbageGame extends FlameGame
     required this.gameBloc,
     required this.powerUpBloc,
     required this.overlayBloc,
+    required this.audioBloc,
     required this.scaffoldBackgroundColor,
   }) : super(
           camera: CameraComponent.withFixedResolution(
@@ -42,6 +45,7 @@ class GarbageGame extends FlameGame
   final GameBloc gameBloc;
   final PowerUpBloc powerUpBloc;
   final OverlayBloc overlayBloc;
+  final AudioBloc audioBloc;
   final Color scaffoldBackgroundColor;
   late Player player;
 
@@ -239,6 +243,9 @@ class GarbageGame extends FlameGame
   }
 
   void _shoot() {
+    if (audioBloc.state is AudioSound) {
+      FlameAudio.play('kunai.mp3', volume: .2);
+    }
     world.add(
       Bullet(
         size: Vector2(14, 40),
@@ -256,7 +263,9 @@ class GarbageGame extends FlameGame
     final bounceLevel = currentPowers[PowerUpType.bounceBullet];
 
     final shootCount = ((bounceLevel ?? 0) / 3).round() + 1;
-
+    if (audioBloc.state is AudioSound) {
+      FlameAudio.play('bounce.mp3', volume: .4);
+    }
     for (var i = 0; i < shootCount; i++) {
       world.add(
         Bullet(
@@ -275,6 +284,9 @@ class GarbageGame extends FlameGame
     final currentPowers = powerUpBloc.state.powersLevel;
     final hasBigBullet = currentPowers.keys.contains(PowerUpType.bigGun);
     if (!hasBigBullet) return;
+    if (audioBloc.state is AudioSound) {
+      FlameAudio.play('shuriken.mp3', volume: .2);
+    }
     world.add(
       Bullet(
         size: Vector2(73.5, 73.5),
@@ -437,9 +449,22 @@ class GarbageGame extends FlameGame
       case LogicalKeyboardKey.enter:
         if (gameBloc.state.status == GameStatus.gameOver) {
           gameBloc.restart();
+          if (audioBloc.state is AudioSound) {
+            FlameAudio.play('pause.mp3');
+            audioBloc.restart();
+          }
         } else if (gameBloc.state.status == GameStatus.paused ||
             gameBloc.state.status == GameStatus.playing ||
             gameBloc.state.status == GameStatus.wonLevel) {
+          if (audioBloc.state is AudioSound) {
+            if (gameBloc.state.status == GameStatus.playing) {
+              audioBloc.pause();
+            }
+            if (gameBloc.state.status == GameStatus.paused) {
+              audioBloc.resume();
+            }
+            FlameAudio.play('pause.mp3');
+          }
           gameBloc.pause();
         }
     }

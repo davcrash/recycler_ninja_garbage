@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
+import 'package:garbage_game/src/bloc/audio/audio_bloc.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/bloc/overlay/overlay_bloc.dart';
 import 'package:garbage_game/src/colors.dart' as colors;
@@ -90,6 +92,15 @@ class PowerUp extends SpriteAnimationComponent
       add(RemoveEffect(delay: 0.2));
       game.overlayBloc.show(type: OverlayType.caughtPower, powerUpType: type);
       game.powerUpBloc.catchAPower(type: type);
+
+      if (game.audioBloc.state is AudioSound) {
+        if (type == PowerUpType.nuclearBomb) {
+          FlameAudio.play('bomb.mp3', volume: 3);
+        }
+        if (type == PowerUpType.heal) {
+          FlameAudio.play('heal.mp3', volume: 1);
+        }
+      }
     }
   }
 }

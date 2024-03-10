@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame_audio/flame_audio.dart';
+import 'package:garbage_game/src/bloc/audio/audio_bloc.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/components/bullet.dart';
 import 'package:garbage_game/src/components/play_area.dart';
@@ -165,6 +167,9 @@ class Enemy extends SpriteAnimationComponent
     if (other is Bullet) {
       lifePoints -= other.type == BulletType.bounce ? 2 : 1;
       if (lifePoints <= 0) {
+        if (game.audioBloc.state is AudioSound) {
+          FlameAudio.play('kill.mp3', volume: .4);
+        }
         removeFromParent();
         game.gameBloc.killEnemy(byBullet: true, type: type);
       }

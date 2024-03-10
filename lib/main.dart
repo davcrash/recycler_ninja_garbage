@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:flame/flame.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:garbage_game/src/app.dart';
+import 'package:garbage_game/src/bloc/audio/audio_bloc.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/bloc/overlay/overlay_bloc.dart';
 import 'package:garbage_game/src/bloc/power_up/power_up_bloc.dart';
@@ -23,6 +25,18 @@ void main() async {
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
     SystemUiOverlay.bottom, //This line is used for showing the bottom bar
   ]);
+
+  await FlameAudio.audioCache.loadAll([
+    'bomb.mp3',
+    'bounce.mp3',
+    'heal.mp3',
+    'kunai.mp3',
+    'music.mp3',
+    'pause.mp3',
+    'shuriken.mp3',
+  ]);
+  final audioPlayer = await FlameAudio.loopLongAudio('music.mp3', volume: 0.5);
+
   runApp(
     MultiBlocProvider(
       providers: [
@@ -37,6 +51,11 @@ void main() async {
         ),
         BlocProvider<OverlayBloc>(
           create: (context) => OverlayBloc(),
+        ),
+        BlocProvider<AudioBloc>(
+          create: (context) => AudioBloc(
+            audioPlayer: audioPlayer,
+          ),
         ),
       ],
       child: const GameApp(),

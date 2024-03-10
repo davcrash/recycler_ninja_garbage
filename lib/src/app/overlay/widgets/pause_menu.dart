@@ -1,7 +1,9 @@
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:garbage_game/src/app/overlay/widgets/power_up_image.dart';
 import 'package:garbage_game/src/app/widgets/bloc_button.dart';
+import 'package:garbage_game/src/bloc/audio/audio_bloc.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/bloc/power_up/power_up_bloc.dart';
 import 'package:garbage_game/src/bloc/score/score_bloc.dart';
@@ -32,19 +34,46 @@ class PauseMenu extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              "PAUSED",
-              textAlign: TextAlign.center,
-              style: baseTheme.textTheme.headlineLarge?.copyWith(
-                color: baseTheme.colorScheme.primary,
-                shadows: [
-                  const Shadow(
-                    offset: Offset(2.0, 2.0),
-                    blurRadius: 0.0,
-                    color: Colors.black,
+            Stack(
+              children: [
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: BlocBuilder<AudioBloc, AudioState>(
+                    builder: (context, state) {
+                      return IconButton(
+                        icon: Icon(
+                          (state is AudioMuted)
+                              ? Icons.volume_off
+                              : Icons.volume_up,
+                          color: baseTheme.colorScheme.secondary,
+                        ),
+                        onPressed: () {
+                          context.read<AudioBloc>().mutedButtonPressed(
+                                resume: context.read<GameBloc>().state.status !=
+                                    GameStatus.paused,
+                              );
+                        },
+                      );
+                    },
                   ),
-                ],
-              ),
+                ),
+                Center(
+                  child: Text(
+                    "PAUSED",
+                    textAlign: TextAlign.center,
+                    style: baseTheme.textTheme.headlineLarge?.copyWith(
+                      color: baseTheme.colorScheme.primary,
+                      shadows: [
+                        const Shadow(
+                          offset: Offset(2.0, 2.0),
+                          blurRadius: 0.0,
+                          color: Colors.black,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
             BlocBuilder<PowerUpBloc, PowerUpState>(
               builder: (context, state) {
@@ -133,8 +162,13 @@ class PauseMenu extends StatelessWidget {
             ),
             BlockButton(
               onPressed: () {
-                final gameBloc = context.read<GameBloc>();
-                gameBloc.pause();
+                final audioBloc = context.read<AudioBloc>();
+                context.read<GameBloc>().pause();
+                if (audioBloc.state is AudioSound) {
+                  audioBloc.pause();
+                  FlameAudio.play('pause.mp3');
+                  audioBloc.resume();
+                }
               },
               label: 'RESUME',
             ),
@@ -145,6 +179,12 @@ class PauseMenu extends StatelessWidget {
                   backgroundColor: baseTheme.colorScheme.error,
                 ),
                 onPressed: () {
+                  final audioBloc = context.read<AudioBloc>();
+                  if (audioBloc.state is AudioSound) {
+                    audioBloc.pause();
+                    FlameAudio.play('pause.mp3');
+                    audioBloc.resume();
+                  }
                   final gameBloc = context.read<GameBloc>();
                   final gameBlocState = gameBloc.state;
                   context.read<ScoreBloc>().updateData(

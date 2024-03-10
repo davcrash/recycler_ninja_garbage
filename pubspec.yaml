@@ -40,6 +40,7 @@ dependencies:
   shared_preferences: ^2.2.2
   animated_text_kit: ^4.2.2
   window_manager: ^0.3.8
+  flame_audio: ^2.1.8
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +67,7 @@ flutter:
   assets:
     - assets/images/sprites/
     - assets/images/sprites/player/
+    - assets/audio/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

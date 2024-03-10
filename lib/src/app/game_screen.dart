@@ -1,7 +1,9 @@
 import 'package:flame/game.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:garbage_game/src/app/overlay/overlay_screen.dart';
+import 'package:garbage_game/src/bloc/audio/audio_bloc.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/bloc/overlay/overlay_bloc.dart' as bloc;
 import 'package:garbage_game/src/bloc/power_up/power_up_bloc.dart';
@@ -62,6 +64,7 @@ class GameScreen extends StatelessWidget {
                       gameBloc: context.read<GameBloc>(),
                       powerUpBloc: context.read<PowerUpBloc>(),
                       overlayBloc: context.read<bloc.OverlayBloc>(),
+                      audioBloc: context.read<AudioBloc>(),
                       scaffoldBackgroundColor: Colors.transparent,
                     ),
                   ),
@@ -78,7 +81,12 @@ class GameScreen extends StatelessWidget {
                             children: [
                               ElevatedButton(
                                 onPressed: () {
+                                  final audioBloc = context.read<AudioBloc>();
                                   context.read<GameBloc>().pause();
+                                  if (audioBloc.state is AudioSound) {
+                                    audioBloc.pause();
+                                    FlameAudio.play('pause.mp3');
+                                  }
                                 },
                                 child: const Text('| |'),
                               ),
