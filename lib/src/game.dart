@@ -126,6 +126,7 @@ class GarbageGame extends FlameGame
               _removeEnemiesFromScreen();
               _removePowerUpsFromScreen();
               _removeBulletsFromScreen();
+              powerUpBloc.reset();
               isPrintedCompleted = false;
               currentEnemies = state.currentLevel.enemies;
               break;

@@ -20,4 +20,8 @@ class PowerUpBloc extends Cubit<PowerUpState> {
       ),
     );
   }
+
+  void reset() {
+    emit(const PowerUpState());
+  }
 }
