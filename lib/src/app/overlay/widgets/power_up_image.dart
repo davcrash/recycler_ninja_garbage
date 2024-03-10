@@ -15,7 +15,7 @@ class PowerUpImage extends StatelessWidget {
     switch (powerUpType) {
       case PowerUpType.bigGun:
         return Image.asset(
-          'assets/images/sprites/shuriken.png',
+          'assets/images/sprites/shuriken_overlay.png',
           height: height,
         );
       case PowerUpType.bounceBullet:
