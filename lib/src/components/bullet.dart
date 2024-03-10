@@ -68,10 +68,6 @@ class Bullet extends SpriteAnimationComponent
   @override
   FutureOr<void> onLoad() {
     _loadAnimation();
-    add(RectangleHitbox(
-      position: position,
-      size: size,
-    ));
     return super.onLoad();
   }
 

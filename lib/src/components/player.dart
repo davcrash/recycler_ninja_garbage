@@ -84,10 +84,6 @@ class Player extends SpriteAnimationGroupComponent
   @override
   dart_async.FutureOr<void> onLoad() {
     _loadAllAnimations();
-    add(RectangleHitbox(
-      position: position,
-      size: size,
-    ));
     return super.onLoad();
   }
 

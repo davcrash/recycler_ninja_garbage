@@ -119,10 +119,6 @@ class Enemy extends SpriteAnimationComponent
   FutureOr<void> onLoad() {
     _loadAnimation();
 
-    add(RectangleHitbox(
-      position: position,
-      size: size,
-    ));
     return super.onLoad();
   }
 

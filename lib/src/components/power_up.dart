@@ -39,11 +39,6 @@ class PowerUp extends SpriteAnimationComponent
       5,
       0.07,
     );
-
-    add(RectangleHitbox(
-      position: position,
-      size: size,
-    ));
     return super.onLoad();
   }
 
