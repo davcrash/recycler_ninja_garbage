@@ -58,7 +58,7 @@ class GarbageGame extends FlameGame
   );
 
   late final Timer _powerUpTimer = Timer(
-    .4,
+    4,
     onTick: () => _addPowerUp(),
     repeat: true,
   );
@@ -241,7 +241,7 @@ class GarbageGame extends FlameGame
   void _shoot() {
     world.add(
       Bullet(
-        size: Vector2(12, 34),
+        size: Vector2(14, 40),
         position: player.position,
         velocity: Vector2(0, -1).normalized()..scale(height),
       ),

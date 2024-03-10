@@ -100,7 +100,11 @@ class Enemy extends SpriteAnimationComponent
   }
 
   SpriteAnimation _spriteAnimation(
-      String name, int amount, double stepTime, double size) {
+    String name,
+    int amount,
+    double stepTime,
+    double size,
+  ) {
     return SpriteAnimation.fromFrameData(
       game.images.fromCache(name),
       SpriteAnimationData.sequenced(

@@ -2,14 +2,13 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/flame.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/components/play_area.dart';
 import 'package:garbage_game/src/game.dart';
 import 'package:garbage_game/src/components/enemy.dart';
 import 'package:garbage_game/src/models/bullet_type.dart';
 
-class Bullet extends SpriteComponent
+class Bullet extends SpriteAnimationComponent
     with CollisionCallbacks, HasGameReference<GarbageGame> {
   Bullet({
     required super.size,
@@ -18,11 +17,6 @@ class Bullet extends SpriteComponent
     BulletType? type,
   })  : type = type ?? BulletType.normal,
         super(
-          sprite: type == BulletType.bounce
-              ? Sprite(Flame.images.fromCache('sprites/ball.png'))
-              : type == BulletType.big
-                  ? Sprite(Flame.images.fromCache('sprites/shuriken.png'))
-                  : Sprite(Flame.images.fromCache('sprites/kunai.png')),
           anchor: Anchor.center,
           children: [RectangleHitbox()],
           priority: 1,
@@ -31,8 +25,49 @@ class Bullet extends SpriteComponent
   final Vector2 velocity;
   final BulletType type;
 
+  void _loadAnimation() {
+    switch (type) {
+      case BulletType.bounce:
+        animation = _spriteAnimation(
+          'sprites/ball.png',
+          1,
+          1,
+        );
+      case BulletType.big:
+        animation = _spriteAnimation(
+          'sprites/shuriken.png',
+          3,
+          .06,
+        );
+      case BulletType.normal:
+      default:
+        animation = _spriteAnimation(
+          'sprites/kunai.png',
+          1,
+          1,
+        );
+    }
+  }
+
+  SpriteAnimation _spriteAnimation(
+    String name,
+    int amount,
+    double stepTime,
+  ) {
+    return SpriteAnimation.fromFrameData(
+      game.images.fromCache(name),
+      SpriteAnimationData.sequenced(
+        amount: amount,
+        stepTime: stepTime,
+        textureSize:
+            type == BulletType.normal ? Vector2(12, 34) : Vector2(30, 30),
+      ),
+    );
+  }
+
   @override
   FutureOr<void> onLoad() {
+    _loadAnimation();
     add(RectangleHitbox(
       position: position,
       size: size,
