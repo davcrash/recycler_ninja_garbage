@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:flame/components.dart';
+import 'package:flame/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -56,12 +58,24 @@ class MainScreen extends StatelessWidget {
                           ),
                         ),
                         const Padding(
-                            padding: EdgeInsets.only(top: Spacing.lg)),
-                        //TODO: change placeholder to image
-                        const Placeholder(
-                          child: SizedBox(
-                            height: 250,
-                            width: 250,
+                          padding: EdgeInsets.only(top: Spacing.lg),
+                        ),
+                        /* SpriteAnimationWidget.asset(
+                          path: 'sprites/player/idle.png',
+                          data: SpriteAnimationData.sequenced(
+                            amountPerRow: 1,
+                            amount: 2,
+                            stepTime: 0.2,
+                            textureSize: Vector2.all(60),
+                          ),
+                        ), */
+                        SizedBox(
+                          height: 250,
+                          width: 250,
+                          child: SpriteWidget.asset(
+                            path: 'sprites/player/main.png',
+                            srcPosition: Vector2.all(0),
+                            srcSize: Vector2.all(50),
                           ),
                         ),
                         const Padding(

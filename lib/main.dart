@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +13,7 @@ import 'package:window_manager/window_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Flame.images.loadAllImages();
   await windowManager.ensureInitialized();
   if (Platform.isWindows || Platform.isMacOS) {
     const size = Size(400.0, 800.0);
