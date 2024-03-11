@@ -1,6 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:garbage_game/src/bloc/overlay/overlay_bloc.dart';
 import 'package:garbage_game/src/spacing.dart';
 
@@ -17,7 +18,7 @@ class World extends StatelessWidget {
           AnimatedTextKit(
             animatedTexts: [
               TypewriterAnimatedText(
-                'ORGANIC WASTE WORLD',
+                AppLocalizations.of(context)!.organic_waste_world,
                 speed: const Duration(milliseconds: 60),
                 textAlign: TextAlign.center,
                 textStyle: baseTheme.textTheme.headlineLarge?.copyWith(

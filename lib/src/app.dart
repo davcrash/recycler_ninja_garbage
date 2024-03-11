@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:garbage_game/src/app/credits_screen.dart';
 import 'package:garbage_game/src/app/game_screen.dart';
 import 'package:garbage_game/src/app/main_screen.dart';
@@ -20,6 +22,7 @@ class GameApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: "Recycler Ninja Garbage",
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: false,
@@ -43,6 +46,18 @@ class GameApp extends StatelessWidget {
           seedColor: colors.primary,
         ),
       ),
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en'),
+        Locale('es'),
+        Locale('ja'),
+        Locale('pt'),
+      ],
       routes: {
         '/': (context) => const MainScreen(),
         '/game': (context) => const GameScreen(),

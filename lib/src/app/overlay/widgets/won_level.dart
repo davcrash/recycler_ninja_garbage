@@ -1,6 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:garbage_game/src/bloc/audio/audio_bloc.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
 import 'package:garbage_game/src/spacing.dart';
@@ -18,7 +19,7 @@ class WonLevel extends StatelessWidget {
           AnimatedTextKit(
             animatedTexts: [
               TypewriterAnimatedText(
-                'MISSION\nCOMPLETE!',
+                AppLocalizations.of(context)!.mission_complete,
                 speed: const Duration(milliseconds: 60),
                 textAlign: TextAlign.center,
                 textStyle: baseTheme.textTheme.headlineLarge?.copyWith(
@@ -42,7 +43,8 @@ class WonLevel extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(
                   vertical: Spacing.sm,
                 ),
-                child: Text("Lvl ${state.currentLevelNumber - 1} COMPLETED"),
+                child: Text(
+                    "${AppLocalizations.of(context)!.lvl} ${state.currentLevelNumber - 1} ${AppLocalizations.of(context)!.completed}"),
               );
             },
           ),
@@ -52,7 +54,7 @@ class WonLevel extends StatelessWidget {
               final audioBloc = context.read<AudioBloc>();
               audioBloc.playAudio('pause.mp3');
             },
-            child: const Text('CONTINUE'),
+            child: Text(AppLocalizations.of(context)!.continue_text),
           ),
         ],
       ),

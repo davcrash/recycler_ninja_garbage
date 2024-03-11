@@ -1,6 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:garbage_game/src/app/widgets/bloc_button.dart';
 import 'package:garbage_game/src/bloc/audio/audio_bloc.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
@@ -19,7 +20,7 @@ class GameOver extends StatelessWidget {
           AnimatedTextKit(
             animatedTexts: [
               TypewriterAnimatedText(
-                'GAME OVER',
+                AppLocalizations.of(context)!.game_over,
                 speed: const Duration(milliseconds: 60),
                 textAlign: TextAlign.center,
                 textStyle: baseTheme.textTheme.headlineLarge?.copyWith(
@@ -48,7 +49,7 @@ class GameOver extends StatelessWidget {
                 audioBloc.resume();
                 context.read<GameBloc>().restart();
               },
-              label: 'RESTART',
+              label: AppLocalizations.of(context)!.restart,
             ),
           ),
           Padding(
@@ -64,7 +65,7 @@ class GameOver extends StatelessWidget {
                   "/",
                 );
               },
-              child: const Text("Exit to menu"),
+              child: Text(AppLocalizations.of(context)!.exit_to_menu),
             ),
           ),
         ],

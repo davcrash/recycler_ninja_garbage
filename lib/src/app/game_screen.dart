@@ -1,6 +1,7 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:garbage_game/src/app/overlay/overlay_screen.dart';
 import 'package:garbage_game/src/bloc/audio/audio_bloc.dart';
 import 'package:garbage_game/src/bloc/game/game_bloc.dart';
@@ -90,7 +91,7 @@ class GameScreen extends StatelessWidget {
                               BlocBuilder<GameBloc, GameState>(
                                 builder: (context, state) {
                                   return Text(
-                                    'Lvl ${state.currentLevelNumber}',
+                                    '${AppLocalizations.of(context)!.lvl} ${state.currentLevelNumber}',
                                     textAlign: TextAlign.center,
                                     style: baseTheme.textTheme.headlineSmall
                                         ?.copyWith(

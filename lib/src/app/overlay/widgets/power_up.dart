@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:garbage_game/src/app/overlay/widgets/power_up_image.dart';
 import 'package:garbage_game/src/bloc/overlay/overlay_bloc.dart';
 import 'package:garbage_game/src/colors.dart' as colors;
@@ -52,19 +53,20 @@ class _PowerUpAnimationState extends State<PowerUpAnimation>
     super.dispose();
   }
 
-  String _getTextByType() {
+  String _getTextByType(context) {
     switch (widget.powerUpType) {
       case PowerUpType.bigGun:
-        return "+Shuriken";
+        return "+${AppLocalizations.of(context)!.shuriken}";
       case PowerUpType.bounceBullet:
-        return "+Bounce Ball";
+        return "+${AppLocalizations.of(context)!.bounce_ball}";
       case PowerUpType.heal:
-        return "+Heal";
+        return "+${AppLocalizations.of(context)!.heal}";
+
       case PowerUpType.nuclearBomb:
-        return "Nuclear Bomb";
+        return AppLocalizations.of(context)!.nuclear_bomb;
       case PowerUpType.machineGun:
       default:
-        return "+Kunai Speed";
+        return "+${AppLocalizations.of(context)!.kunai_speed}";
     }
   }
 
@@ -90,7 +92,7 @@ class _PowerUpAnimationState extends State<PowerUpAnimation>
           Padding(
             padding: const EdgeInsets.only(top: .4),
             child: Text(
-              _getTextByType(),
+              _getTextByType(context),
               textAlign: TextAlign.center,
               style: baseTheme.textTheme.bodySmall?.copyWith(
                 fontSize: 0.35,

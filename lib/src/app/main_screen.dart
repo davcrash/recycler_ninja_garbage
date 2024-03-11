@@ -4,6 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:garbage_game/src/app/widgets/bloc_button.dart';
 import 'package:garbage_game/src/bloc/audio/audio_bloc.dart';
@@ -76,7 +77,7 @@ class MainScreen extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              "RECYCLER NINJA\nGARBAGE",
+                              AppLocalizations.of(context)!.title,
                               textAlign: TextAlign.center,
                               style:
                                   baseTheme.textTheme.headlineLarge?.copyWith(
@@ -162,7 +163,8 @@ class MainScreen extends StatelessWidget {
                                       ),
                                       child: ScoreSection(
                                         score: state.enemiesKilled,
-                                        label: 'Recycled enemies',
+                                        label: AppLocalizations.of(context)!
+                                            .recycled_enemies,
                                         isBigger: true,
                                       ),
                                     ),
@@ -176,7 +178,8 @@ class MainScreen extends StatelessWidget {
                                         children: [
                                           ScoreSection(
                                             score: state.maxScore,
-                                            label: 'Max recycling score',
+                                            label: AppLocalizations.of(context)!
+                                                .max_recycling_score,
                                           ),
                                           const Padding(
                                             padding: EdgeInsets.only(
@@ -185,14 +188,16 @@ class MainScreen extends StatelessWidget {
                                           ),
                                           ScoreSection(
                                             score: state.maxLvl,
-                                            label: 'Max Lvl',
+                                            label: AppLocalizations.of(context)!
+                                                .max_lvl,
                                           ),
                                         ],
                                       ),
                                     ),
                                     ScoreSection(
                                       score: state.maxEnemiesKilled,
-                                      label: 'Max recycled enemies',
+                                      label: AppLocalizations.of(context)!
+                                          .max_recycled_enemies,
                                     ),
                                     const Padding(
                                       padding: EdgeInsets.only(top: Spacing.md),
@@ -254,7 +259,7 @@ class MainScreen extends StatelessWidget {
 
                         _goToGame(context);
                       },
-                      label: "PLAY",
+                      label: AppLocalizations.of(context)!.play,
                     ),
                   ],
                 ),

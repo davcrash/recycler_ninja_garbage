@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:garbage_game/src/colors.dart' as colors;
 import 'package:garbage_game/src/spacing.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -40,7 +41,7 @@ class CreditsScreen extends StatelessWidget {
                           const Padding(
                               padding: EdgeInsets.only(right: Spacing.sm)),
                           Text(
-                            "CREDITS",
+                            AppLocalizations.of(context)!.credits,
                             textAlign: TextAlign.center,
                             style: baseTheme.textTheme.headlineLarge?.copyWith(
                               color: baseTheme.colorScheme.primary,
@@ -59,7 +60,7 @@ class CreditsScreen extends StatelessWidget {
                         padding: EdgeInsets.only(top: Spacing.lg),
                       ),
                       Text(
-                        "FONT",
+                        AppLocalizations.of(context)!.font,
                         textAlign: TextAlign.center,
                         style: baseTheme.textTheme.headlineSmall?.copyWith(
                           color: baseTheme.colorScheme.primary,
@@ -89,7 +90,7 @@ class CreditsScreen extends StatelessWidget {
                         padding: EdgeInsets.only(top: Spacing.lg),
                       ),
                       Text(
-                        "SOUNDS",
+                        AppLocalizations.of(context)!.sounds,
                         textAlign: TextAlign.center,
                         style: baseTheme.textTheme.headlineSmall?.copyWith(
                           color: baseTheme.colorScheme.primary,

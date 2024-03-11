@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:garbage_game/src/app/overlay/widgets/power_up_image.dart';
 import 'package:garbage_game/src/app/widgets/bloc_button.dart';
 import 'package:garbage_game/src/bloc/audio/audio_bloc.dart';
@@ -58,7 +59,7 @@ class PauseMenu extends StatelessWidget {
                 ),
                 Center(
                   child: Text(
-                    "PAUSED",
+                    AppLocalizations.of(context)!.paused,
                     textAlign: TextAlign.center,
                     style: baseTheme.textTheme.headlineLarge?.copyWith(
                       color: baseTheme.colorScheme.primary,
@@ -104,7 +105,7 @@ class PauseMenu extends StatelessWidget {
                                 padding: EdgeInsets.only(right: Spacing.xs),
                               ),
                               Text(
-                                "Lvl. ${mapCopy[PowerUpType.machineGun] ?? 0}",
+                                "${AppLocalizations.of(context)!.lvl}. ${mapCopy[PowerUpType.machineGun] ?? 0}",
                               ),
                             ],
                           ),
@@ -126,7 +127,7 @@ class PauseMenu extends StatelessWidget {
                                 padding: EdgeInsets.only(right: Spacing.xs),
                               ),
                               Text(
-                                "Lvl. ${mapCopy[PowerUpType.bounceBullet] ?? 0}",
+                                "${AppLocalizations.of(context)!.lvl}. ${mapCopy[PowerUpType.bounceBullet] ?? 0}",
                               ),
                             ],
                           ),
@@ -148,7 +149,7 @@ class PauseMenu extends StatelessWidget {
                                 padding: EdgeInsets.only(right: Spacing.xs),
                               ),
                               Text(
-                                "Lvl. ${mapCopy[PowerUpType.bigGun] ?? 0}",
+                                "${AppLocalizations.of(context)!.lvl}. ${mapCopy[PowerUpType.bigGun] ?? 0}",
                               ),
                             ],
                           ),
@@ -167,7 +168,7 @@ class PauseMenu extends StatelessWidget {
                 audioBloc.playAudio('pause.mp3');
                 audioBloc.resume();
               },
-              label: 'RESUME',
+              label: AppLocalizations.of(context)!.resume,
             ),
             Padding(
               padding: const EdgeInsets.only(top: Spacing.xs),
@@ -193,7 +194,7 @@ class PauseMenu extends StatelessWidget {
                     "/",
                   );
                 },
-                child: const Text("Exit to menu"),
+                child: Text(AppLocalizations.of(context)!.exit_to_menu),
               ),
             ),
           ],
