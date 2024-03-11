@@ -1,4 +1,4 @@
-# garbage_game
+# recycler_ninja_garbage
 
 A new Flutter project.
 

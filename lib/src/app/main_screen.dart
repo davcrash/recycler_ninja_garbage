@@ -245,11 +245,7 @@ class MainScreen extends StatelessWidget {
                       ),
                     ),
                     BlockButton(
-                      width: Platform.isIOS ||
-                              Platform.isAndroid ||
-                              Platform.isFuchsia
-                          ? double.infinity
-                          : 400,
+                      width: !isPlatformBigScreen() ? double.infinity : 400,
                       onPressed: () {
                         final audioBloc = context.read<AudioBloc>();
                         audioBloc.restart();
