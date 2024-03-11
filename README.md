@@ -1,16 +1,35 @@
 # recycler_ninja_garbage
 
-A new Flutter project.
+supported platforms
 
-## Getting Started
+- Android
+- iOS
+- Web
+- Mac
+- Windows
 
-This project is a starting point for a Flutter application.
+## To Play in debug
 
-A few resources to get you started if this is your first Flutter project:
+```
+    flutter pub get
+    flutter run
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## To upload to pages
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```
+    flutter clean
+    flutter pub get
+    flutter config --enable-web
+    flutter build web --web-renderer canvaskit --release --base-href '/recycler_ninja_garbage/'
+    cd build/web
+    git init
+    git status
+    git remote add origin https://github.com/davcrash/recycler_ninja_garbage.git
+    git checkout -b gh-pages
+    git add --all
+    git commit -m "new release"
+    git push origin gh-pages -f
+    cd ../..
+
+```

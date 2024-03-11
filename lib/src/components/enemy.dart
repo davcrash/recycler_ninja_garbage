@@ -42,7 +42,7 @@ class Enemy extends SpriteAnimationComponent
   }) {
     return Enemy(
       type: EnemyType.fast,
-      speed: multiplyNumberNTimes(190, 1.03, speedFactor),
+      speed: multiplyNumberNTimes(190, 1.08, speedFactor),
       position: position,
       size: Vector2(gameWidth * 0.07, gameWidth * 0.07),
       lifePoints: 1,
@@ -56,7 +56,7 @@ class Enemy extends SpriteAnimationComponent
   }) {
     return Enemy(
       type: EnemyType.slow,
-      speed: multiplyNumberNTimes(80, 1.03, speedFactor),
+      speed: multiplyNumberNTimes(80, 1.08, speedFactor),
       position: position,
       size: Vector2(gameWidth * 0.14, gameWidth * 0.14),
       lifePoints: 4,
@@ -69,7 +69,7 @@ class Enemy extends SpriteAnimationComponent
     required int speedFactor,
   }) {
     return Enemy(
-      speed: multiplyNumberNTimes(130, 1.03, speedFactor),
+      speed: multiplyNumberNTimes(130, 1.08, speedFactor),
       position: position,
       size: Vector2(gameWidth * 0.09, gameWidth * 0.09),
     );

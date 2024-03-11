@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -40,6 +41,9 @@ class PauseMenu extends StatelessWidget {
                   alignment: Alignment.topLeft,
                   child: BlocBuilder<AudioBloc, AudioState>(
                     builder: (context, state) {
+                      if (kIsWeb) {
+                        return Container();
+                      }
                       return IconButton(
                         icon: Icon(
                           (state is AudioMuted)
