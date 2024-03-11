@@ -16,14 +16,14 @@ import 'package:window_manager/window_manager.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Flame.images.loadAllImages();
-  await windowManager.ensureInitialized();
   if (Platform.isWindows || Platform.isMacOS) {
+    await windowManager.ensureInitialized();
     const size = Size(400.0, 800.0);
     WindowManager.instance.setSize(size);
     WindowManager.instance.setMinimumSize(size);
   }
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
-    SystemUiOverlay.bottom, //This line is used for showing the bottom bar
+    SystemUiOverlay.bottom,
   ]);
 
   await FlameAudio.audioCache.loadAll([

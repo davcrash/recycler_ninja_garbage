@@ -3,6 +3,7 @@ import 'package:garbage_game/src/app/overlay/widgets/game_over.dart';
 import 'package:garbage_game/src/app/overlay/widgets/pause_menu.dart';
 import 'package:garbage_game/src/app/overlay/widgets/power_up.dart';
 import 'package:garbage_game/src/app/overlay/widgets/won_level.dart';
+import 'package:garbage_game/src/app/overlay/widgets/world.dart';
 import 'package:garbage_game/src/bloc/overlay/overlay_bloc.dart';
 import 'package:garbage_game/src/models/power_up_type.dart';
 
@@ -26,6 +27,9 @@ class OverlayScreen extends StatelessWidget {
       case OverlayType.caughtPower:
         return PowerUpAnimation(powerUpType: powerUpType);
 
+      case OverlayType.world:
+        return const World();
+
       case OverlayType.paused:
       default:
         return const PauseMenu();
@@ -35,10 +39,11 @@ class OverlayScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          type == OverlayType.caughtPower || type == OverlayType.wonLevel
-              ? Colors.transparent
-              : Colors.black.withOpacity(0.5),
+      backgroundColor: type == OverlayType.caughtPower ||
+              type == OverlayType.wonLevel ||
+              type == OverlayType.world
+          ? Colors.transparent
+          : Colors.black.withOpacity(0.5),
       body: Center(
         child: _getContentByType(),
       ),

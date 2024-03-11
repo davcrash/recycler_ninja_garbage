@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:garbage_game/src/app/widgets/bloc_button.dart';
 import 'package:garbage_game/src/bloc/audio/audio_bloc.dart';
+import 'package:garbage_game/src/bloc/overlay/overlay_bloc.dart';
 import 'package:garbage_game/src/bloc/score/score_bloc.dart';
 import 'package:garbage_game/src/helpers.dart';
 import 'package:garbage_game/src/spacing.dart';
@@ -247,6 +248,9 @@ class MainScreen extends StatelessWidget {
                       onPressed: () {
                         final audioBloc = context.read<AudioBloc>();
                         audioBloc.restart();
+                        context
+                            .read<OverlayBloc>()
+                            .show(type: OverlayType.world);
 
                         _goToGame(context);
                       },

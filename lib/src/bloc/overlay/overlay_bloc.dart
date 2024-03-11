@@ -5,7 +5,12 @@ import 'package:garbage_game/src/models/power_up_type.dart';
 part 'overlay_state.dart';
 
 class OverlayBloc extends Cubit<OverlayState> {
-  OverlayBloc() : super(OverlayHidden());
+  OverlayBloc()
+      : super(
+          const OverlayShowed(
+            type: OverlayType.world,
+          ),
+        );
 
   void hide() {
     emit(OverlayHidden());
@@ -18,7 +23,6 @@ class OverlayBloc extends Cubit<OverlayState> {
     emit(
       OverlayShowed(
         type: type,
-        hasBackdrop: type != OverlayType.caughtPower,
         powerUpType: powerUpType,
       ),
     );
