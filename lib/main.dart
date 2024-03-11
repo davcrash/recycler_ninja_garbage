@@ -30,6 +30,7 @@ void main() async {
     'bomb.mp3',
     'bounce.mp3',
     'heal.mp3',
+    'kill.mp3',
     'kunai.mp3',
     'music.mp3',
     'pause.mp3',
