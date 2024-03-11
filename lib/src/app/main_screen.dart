@@ -102,12 +102,49 @@ class MainScreen extends StatelessWidget {
                               ),
                             ), */
                             SizedBox(
-                              height: 250,
-                              width: 250,
-                              child: SpriteWidget.asset(
-                                path: 'sprites/player/main.png',
-                                srcPosition: Vector2.all(0),
-                                srcSize: Vector2.all(50),
+                              width: 350,
+                              child: Stack(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: SizedBox(
+                                      height: 150,
+                                      width: 150,
+                                      child: SpriteWidget.asset(
+                                        path: 'sprites/player/red.png',
+                                        srcPosition: Vector2.all(0),
+                                        srcSize: Vector2.all(50),
+                                      ),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.topRight,
+                                    child: Transform.flip(
+                                      flipX: true,
+                                      child: SizedBox(
+                                        height: 150,
+                                        width: 150,
+                                        child: SpriteWidget.asset(
+                                          path: 'sprites/player/white.png',
+                                          srcPosition: Vector2.all(0),
+                                          srcSize: Vector2.all(50),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: SizedBox(
+                                      height: 250,
+                                      width: 250,
+                                      child: SpriteWidget.asset(
+                                        path: 'sprites/player/main.png',
+                                        srcPosition: Vector2.all(0),
+                                        srcSize: Vector2.all(50),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                             const Padding(
